@@ -433,8 +433,8 @@ export default function Home() {
 
         {/* Presets */}
         <div className="p-4" style={{ borderBottom: '1px solid var(--sidebar-border)' }}>
-          <p className="text-[10px] font-bold uppercase tracking-[0.15em] mb-3 flex items-center gap-1.5" style={{ color: 'var(--sidebar-text-muted)' }}>
-            <Zap size={14} className="text-amber-400" /> Chọn nhanh
+          <p className="text-[11px] font-black uppercase tracking-[0.15em] mb-4 flex items-center gap-1.5" style={{ color: 'var(--sidebar-text-muted)' }}>
+            <Zap size={16} className="text-amber-500" /> Chọn nhanh
           </p>
           <div className="grid grid-cols-4 gap-2">
             {PRESETS.map((p) => (
@@ -464,8 +464,8 @@ export default function Home() {
         <div className="flex-1 overflow-y-auto dark-scrollbar p-4 flex flex-col gap-2">
           {/* --- Grid Layout --- */}
           <details open>
-            <summary className="cursor-pointer text-[11px] font-bold uppercase tracking-[0.12em] py-2 select-none flex items-center gap-2" style={{ color: 'var(--sidebar-text-muted)' }}>
-              <Grid3X3 size={14} style={{ color: 'var(--sidebar-text)' }} /> Bố cục lưới
+            <summary className="cursor-pointer text-[12px] font-black uppercase tracking-[0.12em] py-2.5 select-none flex items-center gap-2" style={{ color: 'var(--sidebar-text-muted)' }}>
+              <Grid3X3 size={16} style={{ color: 'var(--sidebar-text-bright)' }} /> Bố cục lưới
             </summary>
             <div className="mt-1 flex flex-col gap-4 pl-0.5">
               <div>
@@ -533,9 +533,9 @@ export default function Home() {
                 <span className="font-semibold flex items-center gap-1.5">Chế độ xen kẽ hàng</span>
               </label>
 
-              <div className="mt-4 pt-4" style={{ borderTop: '1px solid var(--sidebar-border)' }}>
-                <label className="flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider mb-2" style={{ color: 'var(--sidebar-text-muted)' }}>
-                  <Palette size={12} /> Màu đường kẻ ô
+              <div className="mt-5 pt-5" style={{ borderTop: '1px solid var(--sidebar-border)' }}>
+                <label className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wider mb-3" style={{ color: 'var(--sidebar-text-muted)' }}>
+                  <Palette size={14} style={{ color: 'var(--sidebar-text-bright)' }} /> Màu đường kẻ ô
                 </label>
                 <div className="flex gap-2.5">
                   {GRID_COLORS.map((c) => (
@@ -578,12 +578,12 @@ export default function Home() {
 
           {/* --- Style --- */}
           <details>
-            <summary className="cursor-pointer text-[11px] font-bold uppercase tracking-[0.12em] py-2 select-none flex items-center gap-2" style={{ color: 'var(--sidebar-text-muted)' }}>
-              <Palette size={14} style={{ color: 'var(--sidebar-text)' }} /> Kiểu dáng
+            <summary className="cursor-pointer text-[12px] font-black uppercase tracking-[0.12em] py-2.5 select-none flex items-center gap-2" style={{ color: 'var(--sidebar-text-muted)' }}>
+              <Palette size={16} style={{ color: 'var(--sidebar-text-bright)' }} /> Kiểu dáng
             </summary>
-            <div className="mt-1 flex flex-col gap-4 pl-0.5">
+            <div className="mt-2 flex flex-col gap-4 pl-0.5">
               <div>
-                <label className="text-[10px] font-bold uppercase tracking-wider mb-2 block" style={{ color: 'var(--sidebar-text-muted)' }}>
+                <label className="text-[11px] font-black uppercase tracking-wider mb-2.5 block" style={{ color: 'var(--sidebar-text-muted)' }}>
                   Màu nền dòng mẫu
                 </label>
                 <div className="flex gap-2.5">
@@ -604,7 +604,7 @@ export default function Home() {
                 </div>
               </div>
               <div>
-                <label className="text-[10px] font-bold uppercase tracking-wider mb-2 block" style={{ color: 'var(--sidebar-text-muted)' }}>
+                <label className="text-[11px] font-black uppercase tracking-wider mb-2.5 block" style={{ color: 'var(--sidebar-text-muted)' }}>
                   Kiểu viền ô
                 </label>
                 <div className="flex gap-2">
@@ -633,7 +633,7 @@ export default function Home() {
                 </div>
               </div>
               <div>
-                <label className="text-[10px] font-bold uppercase tracking-wider mb-2 block" style={{ color: 'var(--sidebar-text-muted)' }}>
+                <label className="text-[11px] font-black uppercase tracking-wider mb-2.5 block" style={{ color: 'var(--sidebar-text-muted)' }}>
                   Phông chữ Hàn
                 </label>
                 <div className="flex flex-col gap-1.5">
@@ -666,12 +666,12 @@ export default function Home() {
 
           {/* --- Page Settings --- */}
           <details>
-            <summary className="cursor-pointer text-[11px] font-bold uppercase tracking-[0.12em] py-2 select-none flex items-center gap-2" style={{ color: 'var(--sidebar-text-muted)' }}>
-              <FileText size={14} style={{ color: 'var(--sidebar-text)' }} /> Trang giấy
+            <summary className="cursor-pointer text-[12px] font-black uppercase tracking-[0.12em] py-2.5 select-none flex items-center gap-2" style={{ color: 'var(--sidebar-text-muted)' }}>
+              <FileText size={16} style={{ color: 'var(--sidebar-text-bright)' }} /> Trang giấy
             </summary>
-            <div className="mt-1 flex flex-col gap-4 pl-0.5">
+            <div className="mt-2 flex flex-col gap-4 pl-0.5">
               <div>
-                <label className="text-[10px] font-bold uppercase tracking-wider mb-1.5 block" style={{ color: 'var(--sidebar-text-muted)' }}>
+                <label className="text-[11px] font-black uppercase tracking-wider mb-2 block" style={{ color: 'var(--sidebar-text-muted)' }}>
                   Tiêu đề
                 </label>
                 <input
@@ -683,7 +683,7 @@ export default function Home() {
                 />
               </div>
               <div>
-                <label className="text-[10px] font-bold uppercase tracking-wider mb-1.5 block" style={{ color: 'var(--sidebar-text-muted)' }}>
+                <label className="text-[11px] font-black uppercase tracking-wider mb-2 block" style={{ color: 'var(--sidebar-text-muted)' }}>
                   Phụ đề
                 </label>
                 <input
@@ -704,7 +704,7 @@ export default function Home() {
                 Hiện ô ghi 월 / 일 / 이름
               </label>
               <div>
-                <label className="text-[10px] font-bold uppercase tracking-wider mb-2 block" style={{ color: 'var(--sidebar-text-muted)' }}>
+                <label className="text-[11px] font-black uppercase tracking-wider mb-2.5 block" style={{ color: 'var(--sidebar-text-muted)' }}>
                   Hướng giấy
                 </label>
                 <div className="flex gap-2">
@@ -744,14 +744,14 @@ export default function Home() {
           >
             <Download size={18} /> Tải xuống PDF ({totalPages} trang)
           </button>
-          <div className="mt-3 p-2.5 rounded-lg" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid var(--sidebar-border)' }}>
-            <p className="text-[9px] font-bold uppercase tracking-wider mb-1.5 flex items-center gap-1.5" style={{ color: 'var(--sidebar-text-muted)' }}>
-              <Lightbulb size={12} className="text-amber-400" /> Mẹo in chuẩn A4
+          <div className="mt-4 p-3 rounded-xl" style={{ background: 'var(--sidebar-surface-hover)', border: '1px solid var(--sidebar-border)' }}>
+            <p className="text-[10px] font-black uppercase tracking-wider mb-2 flex items-center gap-1.5" style={{ color: 'var(--sidebar-text-bright)' }}>
+              <Lightbulb size={14} className="text-amber-500 shadow-sm rounded-full bg-white" /> Mẹo in chuẩn A4
             </p>
-            <ul className="text-[9px] space-y-1 list-disc pl-3 leading-tight" style={{ color: 'var(--sidebar-text)' }}>
-              <li>Lề: <strong className="text-white">None</strong></li>
-              <li>Tỷ lệ: <strong className="text-white">100%</strong></li>
-              <li>Bật <strong className="text-white">Background Graphics</strong></li>
+            <ul className="text-[10px] space-y-1.5 font-bold list-disc pl-3 leading-tight" style={{ color: 'var(--sidebar-text-muted)' }}>
+              <li>Lề: <strong style={{ color: 'var(--sidebar-text-bright)' }}>None</strong></li>
+              <li>Tỷ lệ: <strong style={{ color: 'var(--sidebar-text-bright)' }}>100%</strong></li>
+              <li>Bật <strong style={{ color: 'var(--sidebar-text-bright)' }}>Background Graphics</strong></li>
             </ul>
           </div>
         </div>
@@ -848,7 +848,7 @@ export default function Home() {
                 minHeight: `${pageH}mm`,
                 padding: `${MARGIN_MM}mm`,
                 boxSizing: 'border-box',
-                fontFamily: 'Nunito, sans-serif',
+                fontFamily: `'Nunito', 'Nanum Gothic', sans-serif`,
                 display: 'flex',
                 flexDirection: 'column',
               }}

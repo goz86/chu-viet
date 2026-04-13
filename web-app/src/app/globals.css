@@ -6,10 +6,10 @@
   --sidebar-bg: #f8fafc;
   --sidebar-surface: #ffffff;
   --sidebar-surface-hover: #f1f5f9;
-  --sidebar-border: #e2e8f0;
-  --sidebar-text: #475569;
-  --sidebar-text-muted: #94a3b8;
-  --sidebar-text-bright: #0f172a;
+  --sidebar-border: #cbd5e1;
+  --sidebar-text: #1e293b;
+  --sidebar-text-muted: #475569;
+  --sidebar-text-bright: #020617;
   --accent: #0B697B;
   --accent-glow: rgba(11, 105, 123, 0.25);
   --gradient-start: #0B697B;
@@ -17,7 +17,7 @@
 }
 
 body {
-  font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: 'Nunito', 'Nanum Gothic', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 /* ========== Screen: Worksheet Page ========== */
