@@ -420,12 +420,12 @@ export default function Home() {
           <img
             src="/logo.png"
             alt="App Logo"
-            className="w-11 h-11 rounded-xl object-cover"
-            style={{ boxShadow: '0 0 0 2px rgba(59,130,246,0.3)', border: '2px solid rgba(255,255,255,0.1)' }}
+            className="w-11 h-11 rounded-xl object-cover shadow-sm"
+            style={{ border: '1px solid var(--sidebar-border)' }}
           />
           <div>
             <h1 className="text-lg font-extrabold" style={{ color: 'var(--sidebar-text-bright)' }}>Luyện chữ Hàn</h1>
-            <p className="text-[10px] mt-0.5 leading-tight" style={{ color: 'var(--sidebar-text-muted)' }}>
+            <p className="text-[10px] mt-0.5 leading-tight font-medium" style={{ color: 'var(--sidebar-text-muted)' }}>
               Tạo bài tập viết chữ Hàn · Xuất PDF chuẩn A4
             </p>
           </div>
@@ -442,22 +442,19 @@ export default function Home() {
                 key={p.label}
                 onClick={() => applyPreset(p)}
                 title={p.desc}
-                className="relative px-2 py-3 rounded-xl text-center transition-all duration-200 active:scale-95"
+                className="relative px-2 py-3 rounded-[20px] text-center transition-all duration-300 active:scale-95"
                 style={{
-                  background: activePreset === p.label ? 'rgba(59,130,246,0.15)' : 'var(--sidebar-surface)',
-                  border: activePreset === p.label ? '1.5px solid rgba(59,130,246,0.5)' : '1.5px solid transparent',
-                  boxShadow: activePreset === p.label ? '0 0 12px rgba(59,130,246,0.2)' : 'none',
+                  background: activePreset === p.label ? 'var(--accent)' : 'var(--sidebar-surface)',
+                  border: '1.5px solid var(--sidebar-border)',
+                  boxShadow: activePreset === p.label ? '0 4px 12px var(--accent-glow)' : '0 2px 4px rgba(0,0,0,0.02)',
                 }}
               >
                 <div className="flex justify-center mt-1">
-                  <p.icon size={22} color={p.color} className="transition-all" style={{ strokeWidth: activePreset === p.label ? 2.5 : 2 }} />
+                  <p.icon size={22} color={activePreset === p.label ? '#ffffff' : p.color} className="transition-all" style={{ strokeWidth: activePreset === p.label ? 2.5 : 2 }} />
                 </div>
-                <div className="text-[10px] font-semibold mt-1.5" style={{ color: activePreset === p.label ? '#93c5fd' : 'var(--sidebar-text)' }}>
+                <div className="text-[11px] font-bold mt-1.5 transition-colors" style={{ color: activePreset === p.label ? '#ffffff' : 'var(--sidebar-text)' }}>
                   {p.label}
                 </div>
-                {activePreset === p.label && (
-                  <div className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full animate-pulse-subtle" style={{ background: 'var(--accent)' }} />
-                )}
               </button>
             ))}
           </div>
@@ -537,7 +534,7 @@ export default function Home() {
               </label>
 
               <div className="mt-4 pt-4" style={{ borderTop: '1px solid var(--sidebar-border)' }}>
-                <label className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--sidebar-text-muted)' }}>
+                <label className="flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider mb-2" style={{ color: 'var(--sidebar-text-muted)' }}>
                   <Palette size={12} /> Màu đường kẻ ô
                 </label>
                 <div className="flex gap-2.5">
@@ -547,9 +544,9 @@ export default function Home() {
                       onClick={() => setGridColor(c.value)}
                       className={`w-7 h-7 rounded-full transition-all duration-200 ${c.tailwind}`}
                       style={{
-                        border: gridColor === c.value ? '2.5px solid #3b82f6' : '2.5px solid rgba(255,255,255,0.1)',
+                        border: gridColor === c.value ? '2.5px solid var(--accent)' : '2.5px solid var(--sidebar-border)',
                         transform: gridColor === c.value ? 'scale(1.15)' : 'scale(1)',
-                        boxShadow: gridColor === c.value ? '0 0 8px rgba(59,130,246,0.4)' : 'none',
+                        boxShadow: gridColor === c.value ? '0 0 8px var(--accent-glow)' : 'none',
                       }}
                       title={c.label}
                     />
@@ -566,12 +563,12 @@ export default function Home() {
                   }}
                   className="w-full py-2 px-3 text-[11px] font-medium rounded-lg transition-all flex items-center justify-center gap-2"
                   style={{
-                    border: '1px dashed rgba(255,255,255,0.15)',
+                    border: '1.5px dashed var(--sidebar-border)',
                     color: 'var(--sidebar-text)',
-                    background: 'transparent',
+                    background: 'var(--sidebar-surface)',
                   }}
                   onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--sidebar-surface-hover)'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--sidebar-surface)'; }}
                 >
                   <Eraser size={14} /> Dọn đep & Tạo trang trắng
                 </button>
@@ -597,9 +594,9 @@ export default function Home() {
                       className="w-7 h-7 rounded-full transition-all duration-200"
                       style={{
                         backgroundColor: c.value,
-                        border: exampleBg === c.value ? '2.5px solid #3b82f6' : '2.5px solid rgba(255,255,255,0.15)',
+                        border: exampleBg === c.value ? '2.5px solid var(--accent)' : '2.5px solid var(--sidebar-border)',
                         transform: exampleBg === c.value ? 'scale(1.15)' : 'scale(1)',
-                        boxShadow: exampleBg === c.value ? '0 0 8px rgba(59,130,246,0.4)' : 'none',
+                        boxShadow: exampleBg === c.value ? '0 0 8px var(--accent-glow)' : 'none',
                       }}
                       title={c.label}
                     />
@@ -613,22 +610,22 @@ export default function Home() {
                 <div className="flex gap-2">
                   <button
                     onClick={() => setBorderStyle('solid')}
-                    className="flex-1 py-1.5 rounded-lg text-[11px] font-semibold transition-all"
+                    className="flex-1 py-1.5 rounded-[12px] text-[11px] font-bold transition-all"
                     style={{
-                      background: borderStyle === 'solid' ? 'rgba(59,130,246,0.15)' : 'var(--sidebar-surface)',
-                      border: borderStyle === 'solid' ? '1.5px solid rgba(59,130,246,0.4)' : '1.5px solid transparent',
-                      color: borderStyle === 'solid' ? '#93c5fd' : 'var(--sidebar-text)',
+                      background: borderStyle === 'solid' ? 'var(--accent)' : 'var(--sidebar-surface)',
+                      border: '1.5px solid var(--sidebar-border)',
+                      color: borderStyle === 'solid' ? '#ffffff' : 'var(--sidebar-text)',
                     }}
                   >
                     ── Nét liền
                   </button>
                   <button
                     onClick={() => setBorderStyle('dashed')}
-                    className="flex-1 py-1.5 rounded-lg text-[11px] font-semibold transition-all"
+                    className="flex-1 py-1.5 rounded-[12px] text-[11px] font-bold transition-all"
                     style={{
-                      background: borderStyle === 'dashed' ? 'rgba(59,130,246,0.15)' : 'var(--sidebar-surface)',
-                      border: borderStyle === 'dashed' ? '1.5px solid rgba(59,130,246,0.4)' : '1.5px solid transparent',
-                      color: borderStyle === 'dashed' ? '#93c5fd' : 'var(--sidebar-text)',
+                      background: borderStyle === 'dashed' ? 'var(--accent)' : 'var(--sidebar-surface)',
+                      border: '1.5px solid var(--sidebar-border)',
+                      color: borderStyle === 'dashed' ? '#ffffff' : 'var(--sidebar-text)',
                     }}
                   >
                     - - Nét đứt
@@ -644,19 +641,20 @@ export default function Home() {
                     <button
                       key={f.value}
                       onClick={() => setSelectedFont(f)}
-                      className="w-full px-3 py-2 rounded-lg text-left transition-all duration-200"
+                      className="w-full px-4 py-2.5 rounded-[14px] text-left transition-all duration-200"
                       style={{
-                        background: selectedFont.value === f.value ? 'rgba(59,130,246,0.12)' : 'var(--sidebar-surface)',
-                        border: selectedFont.value === f.value ? '1.5px solid rgba(59,130,246,0.4)' : '1.5px solid transparent',
+                        background: selectedFont.value === f.value ? 'var(--accent)' : 'var(--sidebar-surface)',
+                        border: '1.5px solid var(--sidebar-border)',
+                        boxShadow: selectedFont.value === f.value ? '0 4px 12px var(--accent-glow)' : 'inset 0 2px 4px rgba(0,0,0,0.01)',
                       }}
                     >
                       <span
-                        style={{ fontFamily: `'${f.value}', ${f.style}`, color: selectedFont.value === f.value ? '#93c5fd' : 'var(--sidebar-text)' }}
-                        className="text-sm"
+                        style={{ fontFamily: `'${f.value}', ${f.style}`, color: selectedFont.value === f.value ? '#ffffff' : 'var(--sidebar-text-bright)' }}
+                        className="text-[13px] font-bold block"
                       >
                         한글 가나다 - {f.label}
                       </span>
-                      <span className="text-[10px] block mt-0.5" style={{ color: 'var(--sidebar-text-muted)' }}>
+                      <span className="text-[10px] block mt-1" style={{ color: selectedFont.value === f.value ? 'rgba(255,255,255,0.8)' : 'var(--sidebar-text-muted)' }}>
                         {f.desc}
                       </span>
                     </button>
@@ -712,22 +710,22 @@ export default function Home() {
                 <div className="flex gap-2">
                   <button
                     onClick={() => setOrientation('portrait')}
-                    className="flex-1 py-1.5 rounded-lg text-[11px] font-semibold transition-all"
+                    className="flex-1 py-1.5 rounded-[12px] text-[11px] font-bold transition-all"
                     style={{
-                      background: orientation === 'portrait' ? 'rgba(59,130,246,0.15)' : 'var(--sidebar-surface)',
-                      border: orientation === 'portrait' ? '1.5px solid rgba(59,130,246,0.4)' : '1.5px solid transparent',
-                      color: orientation === 'portrait' ? '#93c5fd' : 'var(--sidebar-text)',
+                      background: orientation === 'portrait' ? 'var(--accent)' : 'var(--sidebar-surface)',
+                      border: '1.5px solid var(--sidebar-border)',
+                      color: orientation === 'portrait' ? '#ffffff' : 'var(--sidebar-text)',
                     }}
                   >
                     📃 Dọc
                   </button>
                   <button
                     onClick={() => setOrientation('landscape')}
-                    className="flex-1 py-1.5 rounded-lg text-[11px] font-semibold transition-all"
+                    className="flex-1 py-1.5 rounded-[12px] text-[11px] font-bold transition-all"
                     style={{
-                      background: orientation === 'landscape' ? 'rgba(59,130,246,0.15)' : 'var(--sidebar-surface)',
-                      border: orientation === 'landscape' ? '1.5px solid rgba(59,130,246,0.4)' : '1.5px solid transparent',
-                      color: orientation === 'landscape' ? '#93c5fd' : 'var(--sidebar-text)',
+                      background: orientation === 'landscape' ? 'var(--accent)' : 'var(--sidebar-surface)',
+                      border: '1.5px solid var(--sidebar-border)',
+                      color: orientation === 'landscape' ? '#ffffff' : 'var(--sidebar-text)',
                     }}
                   >
                     📄 Ngang
@@ -850,7 +848,7 @@ export default function Home() {
                 minHeight: `${pageH}mm`,
                 padding: `${MARGIN_MM}mm`,
                 boxSizing: 'border-box',
-                fontFamily: 'Inter, sans-serif',
+                fontFamily: 'Nunito, sans-serif',
                 display: 'flex',
                 flexDirection: 'column',
               }}

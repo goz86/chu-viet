@@ -1,23 +1,23 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Nanum+Gothic:wght@400;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Nanum+Gothic:wght@400;700;800&display=swap');
 @import "tailwindcss";
 
 /* ========== Design Tokens ========== */
 :root {
-  --sidebar-bg: #0f172a;
-  --sidebar-surface: rgba(255, 255, 255, 0.05);
-  --sidebar-surface-hover: rgba(255, 255, 255, 0.08);
-  --sidebar-border: rgba(255, 255, 255, 0.08);
-  --sidebar-text: #cbd5e1;
-  --sidebar-text-muted: #64748b;
-  --sidebar-text-bright: #f1f5f9;
-  --accent: #3b82f6;
-  --accent-glow: rgba(59, 130, 246, 0.3);
-  --gradient-start: #3b82f6;
-  --gradient-end: #6366f1;
+  --sidebar-bg: #f8fafc;
+  --sidebar-surface: #ffffff;
+  --sidebar-surface-hover: #f1f5f9;
+  --sidebar-border: #e2e8f0;
+  --sidebar-text: #475569;
+  --sidebar-text-muted: #94a3b8;
+  --sidebar-text-bright: #0f172a;
+  --accent: #0B697B;
+  --accent-glow: rgba(11, 105, 123, 0.25);
+  --gradient-start: #0B697B;
+  --gradient-end: #128296;
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 /* ========== Screen: Worksheet Page ========== */
@@ -52,19 +52,19 @@ body {
   }
 }
 
-/* ========== Custom Range Slider (Dark Sidebar) ========== */
+/* ========== Custom Range Slider (Light Sidebar) ========== */
 .dark-slider {
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
   height: 6px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.1);
+  background: #e2e8f0;
   outline: none;
   transition: background 0.2s;
 }
 .dark-slider:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: #cbd5e1;
 }
 .dark-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -91,13 +91,13 @@ body {
   box-shadow: 0 0 10px var(--accent-glow), 0 2px 4px rgba(0,0,0,0.3);
 }
 
-/* ========== Custom Checkbox (Dark Sidebar) ========== */
+/* ========== Custom Checkbox (Light Sidebar) ========== */
 .dark-checkbox {
   -webkit-appearance: none;
   appearance: none;
-  width: 16px;
-  height: 16px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  width: 18px;
+  height: 18px;
+  border: 2px solid #cbd5e1;
   border-radius: 4px;
   background: transparent;
   cursor: pointer;
