@@ -109,10 +109,7 @@ function Cell({
   borderStyle: string;
   showGuides?: boolean;
 }) {
-  // Cross guidelines: thin dashed "+" in center of cell
-  const guidesBg = showGuides && !ch
-    ? 'linear-gradient(to right, transparent calc(50% - 0.3px), #ddd calc(50% - 0.3px), #ddd calc(50% + 0.3px), transparent calc(50% + 0.3px)), linear-gradient(to bottom, transparent calc(50% - 0.3px), #ddd calc(50% - 0.3px), #ddd calc(50% + 0.3px), transparent calc(50% + 0.3px))'
-    : undefined;
+  const renderGuides = showGuides && !ch;
 
   return (
     <div
@@ -123,15 +120,40 @@ function Cell({
         justifyContent: 'center',
         border: `0.5px ${borderStyle} ${borderColor}`,
         backgroundColor: bg,
-        backgroundImage: guidesBg,
         fontSize: `${fontSize}mm`,
         fontWeight,
         color,
         boxSizing: 'border-box',
         lineHeight: 1,
         overflow: 'hidden',
+        position: 'relative',
       }}
     >
+      {/* Cross guide lines */}
+      {renderGuides && (
+        <>
+          {/* Vertical center line */}
+          <div style={{
+            position: 'absolute',
+            top: '15%',
+            bottom: '15%',
+            left: '50%',
+            width: 0,
+            borderLeft: '1px dashed #ccc',
+            transform: 'translateX(-0.5px)',
+          }} />
+          {/* Horizontal center line */}
+          <div style={{
+            position: 'absolute',
+            left: '15%',
+            right: '15%',
+            top: '50%',
+            height: 0,
+            borderTop: '1px dashed #ccc',
+            transform: 'translateY(-0.5px)',
+          }} />
+        </>
+      )}
       {ch}
     </div>
   );
@@ -366,7 +388,8 @@ export default function Home() {
             <textarea
               value={text}
               onChange={(e) => setText(e.target.value)}
-              className="w-full h-28 p-3 rounded-lg border border-slate-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 outline-none transition-all resize-none text-sm text-slate-700 leading-relaxed"
+              className="w-full p-3 rounded-lg border border-slate-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 outline-none transition-all resize-y text-sm text-slate-700 leading-relaxed"
+              style={{ minHeight: '7rem', maxHeight: '50vh' }}
               placeholder="Mỗi dòng là một câu..."
             />
             <div className="flex justify-between mt-1">
