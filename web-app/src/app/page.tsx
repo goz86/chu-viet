@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
+import { Circle, Square, Flame, FileText, Zap, Grid3X3, Palette, Eraser, Download, Lightbulb, Eye, Edit3, Scissors } from 'lucide-react';
 
 /* ================================================================
    KOREAN FONTS
@@ -31,10 +32,10 @@ const CONT_HEADER_H_MM = 14;
 const SEPARATOR_H_MM = 5;
 
 const PRESETS = [
-  { label: 'Dễ', emoji: '🟢', gridCols: 8, traceRepeat: 2, emptyRows: 3, desc: 'Ô to, ít cột' },
-  { label: 'Trung bình', emoji: '🟡', gridCols: 12, traceRepeat: 1, emptyRows: 2, desc: 'Cân bằng' },
-  { label: 'Nâng cao', emoji: '🔴', gridCols: 16, traceRepeat: 1, emptyRows: 1, desc: 'Ô nhỏ, nhiều cột' },
-  { label: 'TOPIK', emoji: '📝', gridCols: 20, traceRepeat: 0, emptyRows: 2, desc: 'Giấy thi Wongonji 20 ô' },
+  { label: 'Dễ', icon: Circle, color: '#22c55e', gridCols: 8, traceRepeat: 2, emptyRows: 3, desc: 'Ô to, ít cột' },
+  { label: 'Trung bình', icon: Square, color: '#eab308', gridCols: 12, traceRepeat: 1, emptyRows: 2, desc: 'Cân bằng' },
+  { label: 'Nâng cao', icon: Flame, color: '#ef4444', gridCols: 16, traceRepeat: 1, emptyRows: 1, desc: 'Ô nhỏ, nhiều cột' },
+  { label: 'TOPIK', icon: FileText, color: '#64748b', gridCols: 20, traceRepeat: 0, emptyRows: 2, desc: 'Giấy thi Wongonji 20 ô' },
 ] as const;
 
 const BG_COLORS = [
@@ -432,8 +433,8 @@ export default function Home() {
 
         {/* Presets */}
         <div className="p-4" style={{ borderBottom: '1px solid var(--sidebar-border)' }}>
-          <p className="text-[10px] font-bold uppercase tracking-[0.15em] mb-3" style={{ color: 'var(--sidebar-text-muted)' }}>
-            ⚡ Chọn nhanh
+          <p className="text-[10px] font-bold uppercase tracking-[0.15em] mb-3 flex items-center gap-1.5" style={{ color: 'var(--sidebar-text-muted)' }}>
+            <Zap size={14} className="text-amber-400" /> Chọn nhanh
           </p>
           <div className="grid grid-cols-4 gap-2">
             {PRESETS.map((p) => (
@@ -448,8 +449,10 @@ export default function Home() {
                   boxShadow: activePreset === p.label ? '0 0 12px rgba(59,130,246,0.2)' : 'none',
                 }}
               >
-                <div className="text-lg">{p.emoji}</div>
-                <div className="text-[10px] font-semibold mt-1" style={{ color: activePreset === p.label ? '#93c5fd' : 'var(--sidebar-text)' }}>
+                <div className="flex justify-center mt-1">
+                  <p.icon size={22} color={p.color} className="transition-all" style={{ strokeWidth: activePreset === p.label ? 2.5 : 2 }} />
+                </div>
+                <div className="text-[10px] font-semibold mt-1.5" style={{ color: activePreset === p.label ? '#93c5fd' : 'var(--sidebar-text)' }}>
                   {p.label}
                 </div>
                 {activePreset === p.label && (
@@ -465,7 +468,7 @@ export default function Home() {
           {/* --- Grid Layout --- */}
           <details open>
             <summary className="cursor-pointer text-[11px] font-bold uppercase tracking-[0.12em] py-2 select-none flex items-center gap-2" style={{ color: 'var(--sidebar-text-muted)' }}>
-              <span style={{ color: 'var(--sidebar-text)' }}>📐</span> Bố cục lưới
+              <Grid3X3 size={14} style={{ color: 'var(--sidebar-text)' }} /> Bố cục lưới
             </summary>
             <div className="mt-1 flex flex-col gap-4 pl-0.5">
               <div>
@@ -530,12 +533,12 @@ export default function Home() {
                   onChange={(e) => setIsInterleaved(e.target.checked)}
                   className="dark-checkbox"
                 />
-                <span className="font-semibold">🔄 Chế độ xen kẽ hàng</span>
+                <span className="font-semibold flex items-center gap-1.5">Chế độ xen kẽ hàng</span>
               </label>
 
               <div className="mt-4 pt-4" style={{ borderTop: '1px solid var(--sidebar-border)' }}>
-                <label className="block text-[10px] font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--sidebar-text-muted)' }}>
-                  🎨 Màu đường kẻ ô
+                <label className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--sidebar-text-muted)' }}>
+                  <Palette size={12} /> Màu đường kẻ ô
                 </label>
                 <div className="flex gap-2.5">
                   {GRID_COLORS.map((c) => (
@@ -570,7 +573,7 @@ export default function Home() {
                   onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--sidebar-surface-hover)'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
                 >
-                  🧹 Dọn dẹp & Tạo trang trắng
+                  <Eraser size={14} /> Dọn đep & Tạo trang trắng
                 </button>
               </div>
             </div>
@@ -579,7 +582,7 @@ export default function Home() {
           {/* --- Style --- */}
           <details>
             <summary className="cursor-pointer text-[11px] font-bold uppercase tracking-[0.12em] py-2 select-none flex items-center gap-2" style={{ color: 'var(--sidebar-text-muted)' }}>
-              <span style={{ color: 'var(--sidebar-text)' }}>🎨</span> Kiểu dáng
+              <Palette size={14} style={{ color: 'var(--sidebar-text)' }} /> Kiểu dáng
             </summary>
             <div className="mt-1 flex flex-col gap-4 pl-0.5">
               <div>
@@ -666,7 +669,7 @@ export default function Home() {
           {/* --- Page Settings --- */}
           <details>
             <summary className="cursor-pointer text-[11px] font-bold uppercase tracking-[0.12em] py-2 select-none flex items-center gap-2" style={{ color: 'var(--sidebar-text-muted)' }}>
-              <span style={{ color: 'var(--sidebar-text)' }}>📄</span> Trang giấy
+              <FileText size={14} style={{ color: 'var(--sidebar-text)' }} /> Trang giấy
             </summary>
             <div className="mt-1 flex flex-col gap-4 pl-0.5">
               <div>
@@ -739,12 +742,14 @@ export default function Home() {
         <div className="p-4" style={{ borderTop: '1px solid var(--sidebar-border)' }}>
           <button
             onClick={() => window.print()}
-            className="btn-download w-full py-3.5 text-white font-bold rounded-xl text-sm tracking-wide"
+            className="btn-download w-full py-3.5 text-white font-bold rounded-xl text-sm tracking-wide flex items-center justify-center gap-2"
           >
-            📥 Tải xuống PDF ({totalPages} trang)
+            <Download size={18} /> Tải xuống PDF ({totalPages} trang)
           </button>
           <div className="mt-3 p-2.5 rounded-lg" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid var(--sidebar-border)' }}>
-            <p className="text-[9px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'var(--sidebar-text-muted)' }}>💡 Mẹo in chuẩn A4</p>
+            <p className="text-[9px] font-bold uppercase tracking-wider mb-1.5 flex items-center gap-1.5" style={{ color: 'var(--sidebar-text-muted)' }}>
+              <Lightbulb size={12} className="text-amber-400" /> Mẹo in chuẩn A4
+            </p>
             <ul className="text-[9px] space-y-1 list-disc pl-3 leading-tight" style={{ color: 'var(--sidebar-text)' }}>
               <li>Lề: <strong className="text-white">None</strong></li>
               <li>Tỷ lệ: <strong className="text-white">100%</strong></li>
@@ -759,9 +764,9 @@ export default function Home() {
           ═══════════════════════════════════════════ */}
       <main className="flex-1 overflow-y-auto overflow-x-auto" style={{ background: 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%)' }}>
         {/* Toolbar */}
-        <div className="no-print glass-toolbar p-3 px-5 flex items-center justify-between sticky top-0 z-10">
-          <h2 className="text-sm font-bold text-slate-700 tracking-wide">
-            👀 Bản xem trước
+        <div className="no-print glass-toolbar p-3 px-5 flex items-center justify-between sticky top-0 z-10 transition-all">
+          <h2 className="text-sm font-bold text-slate-700 tracking-wide flex items-center gap-2">
+            <Eye size={18} className="text-blue-500" /> Bản xem trước
           </h2>
           <div className="flex items-center gap-3">
             <span className="text-[11px] text-slate-500 font-medium">
@@ -779,12 +784,12 @@ export default function Home() {
           {/* Centralized Editor Section */}
           <div className="no-print w-full max-w-[210mm] animate-fade-in-up">
             <div className="editor-card bg-white rounded-2xl shadow-lg border border-slate-200/80 overflow-hidden">
-              <div className="p-4 border-b border-slate-100 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="text-lg">📝</span>
-                  <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wide">
-                    {isTopikMode ? 'Đề bài / Nội dung viết' : 'Văn bản cần luyện'}
-                  </h2>
+              <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-white sticky top-0">
+                <div>
+                  <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                    <Edit3 size={18} className="text-blue-500" /> {isTopikMode ? 'Đề bài / Nội dung viết' : 'Văn bản cần luyện'}
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-1">Nhập hoặc dán đoạn văn dài vào đây. Mỗi dòng sẽ là một bài tập viết.</p>
                 </div>
                 <div className="flex gap-2">
                   <button
@@ -845,7 +850,7 @@ export default function Home() {
                 minHeight: `${pageH}mm`,
                 padding: `${MARGIN_MM}mm`,
                 boxSizing: 'border-box',
-                fontFamily: `'${selectedFont.value}', ${selectedFont.style}`,
+                fontFamily: 'Inter, sans-serif',
                 display: 'flex',
                 flexDirection: 'column',
               }}
