@@ -349,9 +349,10 @@ export default function Home() {
     setExampleBg('#DAEAF6');
     if (p.label === 'TOPIK') {
       setIsTopikMode(true);
-      setGridColor('#228b22'); // Forest Green for Topik
+      setGridColor('#000000'); // Black for Topik as requested
       setShowGuides(false);
-      setEmptyRows(15);
+      setEmptyRows(24);
+      setIsInterleaved(false);
     } else {
       setIsTopikMode(false);
       setGridColor('#bbb');
@@ -376,17 +377,31 @@ export default function Home() {
       {/* === Dynamic Print Styles + Google Fonts === */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=East+Sea+Dokdo&family=Gaegu:wght@400;700&family=Gamja+Flower&family=Gothic+A1:wght@400;700;800&family=Hi+Melody&family=Jua&family=Nanum+Gothic:wght@400;700;800&family=Nanum+Myeongjo:wght@400;700;800&family=Nanum+Pen+Script&family=Poor+Story&display=swap');
-        @page { size: A4 ${orientation}; margin: ${MARGIN_MM}mm; }
+        @page { size: A4 ${orientation}; margin: 0; }
         @media print {
           .no-print { display: none !important; }
-          .worksheet-page {
+          html, body, main { 
+            height: auto !important; 
+            overflow: visible !important;
+            background: white !important;
+          }
+          .print-container {
+            display: block !important;
             padding: 0 !important;
-            width: auto !important;
-            min-height: auto !important;
+            margin: 0 !important;
+            gap: 0 !important;
+          }
+          .worksheet-page {
+            width: ${pageW}mm !important;
+            height: ${pageH}mm !important;
+            padding: ${MARGIN_MM}mm !important;
             box-shadow: none !important;
             border: none !important;
             margin: 0 !important;
             page-break-after: always;
+            position: relative !important;
+            top: 0 !important;
+            left: 0 !important;
           }
           .worksheet-page:last-child { page-break-after: auto; }
           .sentence-block { page-break-inside: avoid; }
@@ -702,8 +717,16 @@ export default function Home() {
           >
             📥 Tải xuống PDF ({totalPages} trang)
           </button>
-          <p className="text-xs text-slate-400 text-center mt-2">
-            Chọn <strong>&quot;Save as PDF&quot;</strong> trong hộp thoại in
+          <div className="mt-3 p-3 bg-amber-50 border border-amber-100 rounded-lg">
+            <p className="text-[10px] text-amber-800 font-bold uppercase mb-1">💡 Mẹo in chuẩn A4:</p>
+            <ul className="text-[10px] text-amber-700 space-y-1 list-disc pl-3 leading-tight">
+              <li>Lề (Margins): Chọn <strong>None</strong></li>
+              <li>Tỷ lệ (Scale): Chọn <strong>100%</strong></li>
+              <li>Tùy chọn: Bật <strong>Background Graphics</strong></li>
+            </ul>
+          </div>
+          <p className="text-[10px] text-slate-400 text-center mt-2 px-2">
+            Chọn <strong>&quot;Save as PDF&quot;</strong> trong hộp thoại in của trình duyệt
           </p>
         </div>
       </aside>
@@ -729,7 +752,7 @@ export default function Home() {
         </div>
 
         {/* Main Workspace */}
-        <div className="flex flex-col items-center p-4 md:p-8 gap-8">
+        <div className="flex flex-col items-center p-4 md:p-8 gap-8 print-container">
           {/* Centralized Editor Section */}
           <div className="no-print w-full max-w-[210mm] animate-in fade-in slide-in-from-top-4 duration-500">
             <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
