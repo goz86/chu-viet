@@ -34,14 +34,23 @@ const PRESETS = [
   { label: 'Dễ', emoji: '🟢', gridCols: 8, traceRepeat: 2, emptyRows: 3, desc: 'Ô to, ít cột' },
   { label: 'Trung bình', emoji: '🟡', gridCols: 12, traceRepeat: 1, emptyRows: 2, desc: 'Cân bằng' },
   { label: 'Nâng cao', emoji: '🔴', gridCols: 16, traceRepeat: 1, emptyRows: 1, desc: 'Ô nhỏ, nhiều cột' },
+  { label: 'TOPIK', emoji: '📝', gridCols: 20, traceRepeat: 0, emptyRows: 2, desc: 'Giấy thi Wongonji 20 ô' },
 ] as const;
 
 const BG_COLORS = [
+  { label: 'Trắng', value: '#FFFFFF' },
   { label: 'Xanh', value: '#DAEAF6' },
   { label: 'Hồng', value: '#F6DAE4' },
   { label: 'Vàng', value: '#FFF3D1' },
   { label: 'Xám', value: '#E8E8E8' },
   { label: 'Xanh lá', value: '#D6F0D6' },
+];
+
+const GRID_COLORS = [
+  { label: 'Xám', value: '#bbb', tailwind: 'bg-slate-400' },
+  { label: 'Xanh Lá', value: '#228b22', tailwind: 'bg-green-600' },
+  { label: 'Đỏ Cam', value: '#e67e22', tailwind: 'bg-orange-500' },
+  { label: 'Đen', value: '#111', tailwind: 'bg-black' },
 ];
 
 /* ================================================================
@@ -234,6 +243,18 @@ export default function Home() {
   const [selectedFont, setSelectedFont] = useState(KOREAN_FONTS[0]);
   const [showGuides, setShowGuides] = useState(true);
   const [isEditorExpanded, setIsEditorExpanded] = useState(false);
+  const [isTopikMode, setIsTopikMode] = useState(false);
+  const [gridColor, setGridColor] = useState('#bbb');
+
+  // --- Character Stats ---
+  const charStats = useMemo(() => {
+    const raw = text.replace(/\n/g, '');
+    const noSpaces = raw.replace(/\s/g, '');
+    return {
+      total: raw.length,
+      noSpaces: noSpaces.length,
+    };
+  }, [text]);
 
   // --- Page Settings ---
   const [headerText, setHeaderText] = useState('한글공부');
@@ -313,7 +334,16 @@ export default function Home() {
     setGridCols(p.gridCols);
     setTraceRepeat(p.traceRepeat);
     setEmptyRows(p.emptyRows);
-    setExampleBg(p.bg);
+    setExampleBg(p.bg || '#DAEAF6');
+    if (p.label === 'TOPIK') {
+      setIsTopikMode(true);
+      setGridColor('#228b22'); // Forest Green for Topik
+      setShowGuides(false);
+    } else {
+      setIsTopikMode(false);
+      setGridColor('#bbb');
+      setShowGuides(true);
+    }
   };
 
   const handleSmartSplit = () => {
@@ -413,16 +443,20 @@ export default function Home() {
               style={{ minHeight: '8rem', maxHeight: '50vh' }}
               placeholder="Mỗi dòng là một câu..."
             />
-            <div className="flex justify-between mt-1">
+            <div className="flex justify-between mt-1 items-center">
               <p className="text-xs text-slate-400">
                 {blocks.length} câu · {totalPages} trang
               </p>
-              {maxWrapRows > 2 && (
-                <p className="text-xs text-amber-600">
-                  ⚠ Câu dài ({longestCharCount} ký tự → {maxWrapRows} hàng)
-                </p>
-              )}
+              <div className="flex gap-2 text-[10px] bg-slate-50 px-2 py-0.5 rounded border border-slate-100">
+                <span className="text-slate-500">Tất cả: <b className="text-blue-600">{charStats.total}</b></span>
+                <span className="text-slate-500">K.cách: <b className="text-blue-600">{charStats.noSpaces}</b></span>
+              </div>
             </div>
+            {maxWrapRows > 2 && !isTopikMode && (
+              <p className="text-xs text-amber-600 mt-1">
+                ⚠ Câu dài ({longestCharCount} ký tự → {maxWrapRows} hàng)
+              </p>
+            )}
           </div>
 
           {/* --- Grid Layout --- */}
@@ -439,7 +473,7 @@ export default function Home() {
                 <input
                   type="range"
                   min="6"
-                  max="20"
+                  max="25"
                   value={gridCols}
                   onChange={(e) => setGridCols(+e.target.value)}
                   className="w-full accent-blue-500"
@@ -483,8 +517,41 @@ export default function Home() {
                   onChange={(e) => setShowGuides(e.target.checked)}
                   className="accent-blue-500"
                 />
-                Hiện đường dẫn chữ thập (+) trong ô trống
+                Hiện đường dẫn chữ thập (+)
               </label>
+
+              <div className="mt-4 pt-4 border-t border-slate-100">
+                <label className="block text-xs font-semibold text-slate-700 mb-2">
+                  🎨 Màu đường kẻ ô
+                </label>
+                <div className="flex gap-2">
+                  {GRID_COLORS.map((c) => (
+                    <button
+                      key={c.value}
+                      onClick={() => setGridColor(c.value)}
+                      className={`w-6 h-6 rounded-full border-2 transition-all ${
+                        gridColor === c.value
+                          ? 'border-blue-500 scale-110'
+                          : 'border-transparent opacity-60 hover:opacity-100'
+                      } ${c.tailwind}`}
+                      title={c.label}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-4 pt-4 border-t border-slate-100">
+                <button
+                  onClick={() => {
+                    setText('');
+                    setEmptyRows(10);
+                    setTraceRepeat(0);
+                  }}
+                  className="w-full py-2 px-3 border border-dashed border-slate-300 text-slate-500 text-xs font-medium rounded-lg hover:bg-slate-50 hover:text-slate-700 transition-all flex items-center justify-center gap-2"
+                >
+                  🧹 Dọn dẹp & Tạo trang trắng
+                </button>
+              </div>
             </div>
           </details>
 
@@ -691,66 +758,86 @@ export default function Home() {
               }}
             >
               {/* ---------- PAGE HEADER ---------- */}
+              {/* ---------- PAGE HEADER ---------- */}
               {pIdx === 0 ? (
-                <div style={{ marginBottom: '6mm' }}>
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'baseline',
-                      gap: '6px',
-                      borderBottom: '3px solid #444',
-                      paddingBottom: '5px',
-                    }}
-                  >
-                    <span
+                isTopikMode ? (
+                  <div className="flex flex-col mb-6 p-2 border-2" style={{ borderColor: gridColor }}>
+                    <div className="flex justify-between items-end border-b pb-1 mb-2" style={{ borderColor: gridColor }}>
+                      <h2 className="text-2xl font-black tracking-widest" style={{ color: gridColor }}>TOPIK 원고지</h2>
+                      <div className="flex gap-4 text-[10px] font-bold" style={{ color: gridColor }}>
+                        <span>Câu số: [ &nbsp;&nbsp;&nbsp; ]</span>
+                        <span>Số chữ: [ &nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp; ]</span>
+                      </div>
+                    </div>
+                    <div className="flex justify-between text-[9px] font-bold" style={{ color: gridColor }}>
+                      <div className="flex gap-6">
+                        <span>Họ tên: ...........................................</span>
+                        <span>SBD: ............................</span>
+                      </div>
+                      <span className="opacity-60">Trang {pIdx + 1} / {totalPages}</span>
+                    </div>
+                  </div>
+                ) : (
+                  <div style={{ marginBottom: '6mm' }}>
+                    <div
                       style={{
-                        fontSize: '20px',
-                        fontWeight: 800,
-                        color: '#222',
+                        display: 'flex',
+                        alignItems: 'baseline',
+                        gap: '6px',
+                        borderBottom: '3px solid #444',
+                        paddingBottom: '5px',
                       }}
                     >
-                      {headerText}
-                    </span>
-                    <span style={{ fontSize: '12px', color: '#666' }}>
-                      - {subText}
-                    </span>
-                    {showMeta && (
-                      <div
+                      <span
                         style={{
-                          marginLeft: 'auto',
-                          display: 'flex',
-                          alignItems: 'flex-end',
-                          gap: '20px',
-                          fontSize: '11px',
-                          color: '#555',
-                          paddingBottom: '2px',
+                          fontSize: '20px',
+                          fontWeight: 800,
+                          color: '#222',
                         }}
                       >
-                        <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-                          <span>월</span>
-                          <span style={{ display: 'inline-block', width: '40px', borderBottom: '1px solid #888' }}></span>
+                        {headerText}
+                      </span>
+                      <span style={{ fontSize: '12px', color: '#666' }}>
+                        - {subText}
+                      </span>
+                      {showMeta && (
+                        <div
+                          style={{
+                            marginLeft: 'auto',
+                            display: 'flex',
+                            alignItems: 'flex-end',
+                            gap: '20px',
+                            fontSize: '11px',
+                            color: '#555',
+                            paddingBottom: '2px',
+                          }}
+                        >
+                          <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
+                            <span>월</span>
+                            <span style={{ display: 'inline-block', width: '40px', borderBottom: '1px solid #888' }}></span>
+                          </div>
+                          <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
+                            <span>일</span>
+                            <span style={{ display: 'inline-block', width: '40px', borderBottom: '1px solid #888' }}></span>
+                          </div>
+                          <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
+                            <span>이름</span>
+                            <span style={{ display: 'inline-block', width: '60px', borderBottom: '1px solid #888' }}></span>
+                          </div>
                         </div>
-                        <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-                          <span>일</span>
-                          <span style={{ display: 'inline-block', width: '40px', borderBottom: '1px solid #888' }}></span>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-                          <span>이름</span>
-                          <span style={{ display: 'inline-block', width: '60px', borderBottom: '1px solid #888' }}></span>
-                        </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
+                    <p
+                      style={{
+                        fontSize: '11px',
+                        color: '#555',
+                        marginTop: '4px',
+                      }}
+                    >
+                      {subText || '문장을 읽으면서 천천히 써 보세요'}
+                    </p>
                   </div>
-                  <p
-                    style={{
-                      fontSize: '11px',
-                      color: '#555',
-                      marginTop: '4px',
-                    }}
-                  >
-                    문장을 읽으면서 천천히 써 보세요
-                  </p>
-                </div>
+                )
               ) : (
                 <div
                   style={{
@@ -796,7 +883,7 @@ export default function Home() {
                         bg={exampleBg}
                         color="#111"
                         fontWeight={800}
-                        borderColor="#999"
+                        borderColor={isTopikMode ? gridColor : "#999"}
                         borderStyle={borderStyle}
                         fontFamily={`'${selectedFont.value}', ${selectedFont.style}`}
                       />
@@ -814,7 +901,7 @@ export default function Home() {
                           bg="#fff"
                           color={getTraceColor(tIdx, traceRepeat)}
                           fontWeight={700}
-                          borderColor="#bbb"
+                          borderColor={isTopikMode ? gridColor : "#bbb"}
                           borderStyle={borderStyle}
                           fontFamily={`'${selectedFont.value}', ${selectedFont.style}`}
                           showGuides={showGuides}
@@ -833,7 +920,7 @@ export default function Home() {
                         bg="#fff"
                         color="transparent"
                         fontWeight={400}
-                        borderColor="#ccc"
+                        borderColor={isTopikMode ? gridColor : "#ccc"}
                         borderStyle={borderStyle}
                         fontFamily={`'${selectedFont.value}', ${selectedFont.style}`}
                         showGuides={showGuides}
@@ -905,9 +992,13 @@ export default function Home() {
                 placeholder="Dán đoạn văn tiếng Hàn của bạn vào đây...&#10;&#10;Ví dụ:&#10;안녕하세요. (Chào bạn)&#10;만나서 반갑습니다. (Rất vui được gặp bạn)"
               />
             </div>
-            <div className="p-3 bg-white border-t border-slate-100 text-center">
-              <p className="text-xs text-slate-400">
-                💡 Mẹo: Nhấn <b>"Tự động tách câu"</b> để app tự xuống dòng sau mỗi dấu chấm.
+            <div className="p-3 bg-white border-t border-slate-100 flex items-center justify-between px-6">
+              <div className="flex gap-4 text-xs">
+                <span className="text-slate-500 font-medium">Tổng ký tự: <b className="text-blue-600">{charStats.total}</b></span>
+                <span className="text-slate-500 font-medium">Không bao gồm dấu cách: <b className="text-blue-600">{charStats.noSpaces}</b></span>
+              </div>
+              <p className="text-xs text-slate-400 italic">
+                💡 Mẹo: Nhấn <b>"Tự động tách câu"</b> để tự xuống dòng sau mỗi dấu chấm.
               </p>
             </div>
           </div>
