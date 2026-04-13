@@ -351,7 +351,7 @@ export default function Home() {
       setIsTopikMode(true);
       setGridColor('#000000'); // Black for Topik as requested
       setShowGuides(false);
-      setEmptyRows(24);
+      setEmptyRows(26);
       setIsInterleaved(false);
     } else {
       setIsTopikMode(false);
@@ -496,7 +496,7 @@ export default function Home() {
                 <input
                   type="range"
                   min="0"
-                  max="25"
+                  max="50"
                   value={emptyRows}
                   onChange={(e) => setEmptyRows(+e.target.value)}
                   className="w-full accent-blue-500"
