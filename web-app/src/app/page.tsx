@@ -341,7 +341,7 @@ export default function Home() {
     setGridCols(p.gridCols);
     setTraceRepeat(p.traceRepeat);
     setEmptyRows(p.emptyRows);
-    setExampleBg(p.bg || '#DAEAF6');
+    setExampleBg('#DAEAF6');
     if (p.label === 'TOPIK') {
       setIsTopikMode(true);
       setGridColor('#228b22'); // Forest Green for Topik
