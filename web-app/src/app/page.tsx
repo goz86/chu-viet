@@ -245,6 +245,7 @@ export default function Home() {
   const [isEditorExpanded, setIsEditorExpanded] = useState(false);
   const [isTopikMode, setIsTopikMode] = useState(false);
   const [gridColor, setGridColor] = useState('#bbb');
+  const [isInterleaved, setIsInterleaved] = useState(false);
 
   // --- Character Stats ---
   const charStats = useMemo(() => {
@@ -298,6 +299,10 @@ export default function Home() {
   const pages: SentenceBlock[][] = useMemo(() => {
     const calcBlockH = (b: SentenceBlock) => {
       const n = b.charRows.length;
+      if (isInterleaved) {
+        // Pattern: n * (1 Sample + traceRepeat Traces + emptyRows Empties)
+        return n * (1 + traceRepeat + emptyRows) * cellH + SEPARATOR_H_MM;
+      }
       return (n + n * traceRepeat + emptyRows) * cellH + SEPARATOR_H_MM;
     };
 
@@ -490,6 +495,16 @@ export default function Home() {
                   className="accent-blue-500"
                 />
                 Hiện đường dẫn chữ thập (+)
+              </label>
+
+              <label className="flex items-center gap-2 text-xs text-slate-600 cursor-pointer mt-1">
+                <input
+                  type="checkbox"
+                  checked={isInterleaved}
+                  onChange={(e) => setIsInterleaved(e.target.checked)}
+                  className="accent-blue-500"
+                />
+                <span className="font-semibold text-blue-600">🔄 Chế độ xen kẽ hàng</span>
               </label>
 
               <div className="mt-4 pt-4 border-t border-slate-100">
@@ -904,60 +919,118 @@ export default function Home() {
                     className="sentence-block"
                     style={{ marginBottom: `${SEPARATOR_H_MM}mm` }}
                   >
-                    {/* Example rows (colored background) */}
-                    {block.charRows.map((row, rIdx) => (
-                      <GridRow
-                        key={`ex-${rIdx}`}
-                        chars={row}
-                        gridCols={gridCols}
-                        cellH={cellH}
-                        fontSize={charFontSize}
-                        bg={exampleBg}
-                        color="#111"
-                        fontWeight={800}
-                        borderColor={isTopikMode ? gridColor : "#999"}
-                        borderStyle={borderStyle}
-                        fontFamily={`'${selectedFont.value}', ${selectedFont.style}`}
-                      />
-                    ))}
-
-                    {/* Trace rows (gray text - gradient: darker → lighter) */}
-                    {Array.from({ length: traceRepeat }).flatMap((_, tIdx) =>
+                    {isInterleaved ? (
+                      /* --- INTERLEAVED MODE (Line-by-Line) --- */
                       block.charRows.map((row, rIdx) => (
-                        <GridRow
-                          key={`tr-${tIdx}-${rIdx}`}
-                          chars={row}
-                          gridCols={gridCols}
-                          cellH={cellH}
-                          fontSize={charFontSize}
-                          bg="#fff"
-                          color={getTraceColor(tIdx, traceRepeat)}
-                          fontWeight={700}
-                          borderColor={isTopikMode ? gridColor : "#bbb"}
-                          borderStyle={borderStyle}
-                          fontFamily={`'${selectedFont.value}', ${selectedFont.style}`}
-                          showGuides={showGuides}
-                        />
+                        <React.Fragment key={`inter-${rIdx}`}>
+                          {/* 1. Example Row */}
+                          <GridRow
+                            chars={row}
+                            gridCols={gridCols}
+                            cellH={cellH}
+                            fontSize={charFontSize}
+                            bg={exampleBg}
+                            color="#111"
+                            fontWeight={800}
+                            borderColor={isTopikMode ? gridColor : "#999"}
+                            borderStyle={borderStyle}
+                            fontFamily={`'${selectedFont.value}', ${selectedFont.style}`}
+                          />
+                          {/* 2. Trace Rows for this line */}
+                          {Array.from({ length: traceRepeat }).map((_, tIdx) => (
+                            <GridRow
+                              key={`tr-${rIdx}-${tIdx}`}
+                              chars={row}
+                              gridCols={gridCols}
+                              cellH={cellH}
+                              fontSize={charFontSize}
+                              bg="#fff"
+                              color={getTraceColor(tIdx, traceRepeat)}
+                              fontWeight={700}
+                              borderColor={isTopikMode ? gridColor : "#bbb"}
+                              borderStyle={borderStyle}
+                              fontFamily={`'${selectedFont.value}', ${selectedFont.style}`}
+                              showGuides={showGuides}
+                            />
+                          ))}
+                          {/* 3. Empty Rows for this line */}
+                          {Array.from({ length: emptyRows }).map((_, eIdx) => (
+                            <GridRow
+                              key={`em-${rIdx}-${eIdx}`}
+                              chars={Array(gridCols).fill('')}
+                              gridCols={gridCols}
+                              cellH={cellH}
+                              fontSize={charFontSize}
+                              bg="#fff"
+                              color="transparent"
+                              fontWeight={400}
+                              borderColor={isTopikMode ? gridColor : "#ccc"}
+                              borderStyle={borderStyle}
+                              fontFamily={`'${selectedFont.value}', ${selectedFont.style}`}
+                              showGuides={showGuides}
+                            />
+                          ))}
+                        </React.Fragment>
                       ))
-                    )}
+                    ) : (
+                      /* --- ORIGINAL MODE (Block-by-Block) --- */
+                      <>
+                        {/* Example rows */}
+                        {block.charRows.map((row, rIdx) => (
+                          <GridRow
+                            key={`ex-${rIdx}`}
+                            chars={row}
+                            gridCols={gridCols}
+                            cellH={cellH}
+                            fontSize={charFontSize}
+                            bg={exampleBg}
+                            color="#111"
+                            fontWeight={800}
+                            borderColor={isTopikMode ? gridColor : "#999"}
+                            borderStyle={borderStyle}
+                            fontFamily={`'${selectedFont.value}', ${selectedFont.style}`}
+                          />
+                        ))}
 
-                    {/* Empty practice rows (with optional cross guides) */}
-                    {Array.from({ length: emptyRows }).map((_, eIdx) => (
-                      <GridRow
-                        key={`em-${eIdx}`}
-                        chars={Array(gridCols).fill('')}
-                        gridCols={gridCols}
-                        cellH={cellH}
-                        fontSize={charFontSize}
-                        bg="#fff"
-                        color="transparent"
-                        fontWeight={400}
-                        borderColor={isTopikMode ? gridColor : "#ccc"}
-                        borderStyle={borderStyle}
-                        fontFamily={`'${selectedFont.value}', ${selectedFont.style}`}
-                        showGuides={showGuides}
-                      />
-                    ))}
+                        {/* Trace rows */}
+                        {Array.from({ length: traceRepeat }).flatMap((_, tIdx) =>
+                          block.charRows.map((row, rIdx) => (
+                            <GridRow
+                              key={`tr-${tIdx}-${rIdx}`}
+                              chars={row}
+                              gridCols={gridCols}
+                              cellH={cellH}
+                              fontSize={charFontSize}
+                              bg="#fff"
+                              color={getTraceColor(tIdx, traceRepeat)}
+                              fontWeight={700}
+                              borderColor={isTopikMode ? gridColor : "#bbb"}
+                              borderStyle={borderStyle}
+                              fontFamily={`'${selectedFont.value}', ${selectedFont.style}`}
+                              showGuides={showGuides}
+                            />
+                          ))
+                        )}
+
+                        {/* Empty practice rows */}
+                        {Array.from({ length: emptyRows }).map((_, eIdx) => (
+                          <GridRow
+                            key={`em-${eIdx}`}
+                            chars={Array(gridCols).fill('')}
+                            gridCols={gridCols}
+                            cellH={cellH}
+                            fontSize={charFontSize}
+                            bg="#fff"
+                            color="transparent"
+                            fontWeight={400}
+                            borderColor={isTopikMode ? gridColor : "#ccc"}
+                            borderStyle={borderStyle}
+                            fontFamily={`'${selectedFont.value}', ${selectedFont.style}`}
+                            showGuides={showGuides}
+                          />
+                        ))}
+                      </>
+                    )}
 
                     {/* Dotted separator */}
                     {bIdx < pageBlocks.length - 1 && (
