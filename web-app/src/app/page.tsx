@@ -275,16 +275,23 @@ export default function Home() {
 
   // ====== PROCESS TEXT ======
   const blocks: SentenceBlock[] = useMemo(
-    () =>
-      text
+    () => {
+      const b = text
         .split('\n')
         .map((s) => s.trim())
         .filter(Boolean)
         .map((sentence) => ({
           sentence,
           charRows: sentenceToCharRows(sentence, gridCols),
-        })),
-    [text, gridCols]
+        }));
+      
+      // If TOPIK mode and no text, provide one empty block to render the grid
+      if (b.length === 0 && isTopikMode) {
+        return [{ sentence: '', charRows: [] }];
+      }
+      return b;
+    },
+    [text, gridCols, isTopikMode]
   );
 
   // ====== PAGINATION ======
@@ -339,6 +346,7 @@ export default function Home() {
       setIsTopikMode(true);
       setGridColor('#228b22'); // Forest Green for Topik
       setShowGuides(false);
+      setEmptyRows(15);
     } else {
       setIsTopikMode(false);
       setGridColor('#bbb');
@@ -504,7 +512,7 @@ export default function Home() {
                 <input
                   type="range"
                   min="0"
-                  max="5"
+                  max="25"
                   value={emptyRows}
                   onChange={(e) => setEmptyRows(+e.target.value)}
                   className="w-full accent-blue-500"
@@ -544,7 +552,7 @@ export default function Home() {
                 <button
                   onClick={() => {
                     setText('');
-                    setEmptyRows(10);
+                    setEmptyRows(20);
                     setTraceRepeat(0);
                   }}
                   className="w-full py-2 px-3 border border-dashed border-slate-300 text-slate-500 text-xs font-medium rounded-lg hover:bg-slate-50 hover:text-slate-700 transition-all flex items-center justify-center gap-2"
