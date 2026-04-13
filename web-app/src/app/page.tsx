@@ -537,7 +537,7 @@ export default function Home() {
                 <label className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-wider mb-3" style={{ color: 'var(--sidebar-text-muted)' }}>
                   <Palette size={14} style={{ color: 'var(--sidebar-text-bright)' }} /> Màu đường kẻ ô
                 </label>
-                <div className="flex gap-2.5">
+                <div className="flex flex-wrap gap-2.5">
                   {GRID_COLORS.map((c) => (
                     <button
                       key={c.value}
@@ -586,7 +586,7 @@ export default function Home() {
                 <label className="text-[11px] font-black uppercase tracking-wider mb-2.5 block" style={{ color: 'var(--sidebar-text-muted)' }}>
                   Màu nền dòng mẫu
                 </label>
-                <div className="flex gap-2.5">
+                <div className="flex flex-wrap gap-2.5">
                   {BG_COLORS.map((c) => (
                     <button
                       key={c.value}
@@ -778,29 +778,29 @@ export default function Home() {
         </div>
 
         {/* Main Workspace */}
-        <div className="flex flex-col items-center p-4 md:p-8 gap-8 print-container">
+        <div className="flex flex-col items-start md:items-center min-w-max p-4 md:p-8 gap-8 print-container">
           {/* Centralized Editor Section */}
-          <div className="no-print w-full max-w-[210mm] animate-fade-in-up">
+          <div className="no-print w-full min-w-[320px] max-w-[210mm] animate-fade-in-up md:min-w-[0]">
             <div className="editor-card bg-white rounded-2xl shadow-lg border border-slate-200/80 overflow-hidden">
-              <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-white sticky top-0">
+              <div className="p-4 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between bg-white sticky top-0 gap-3 md:gap-0">
                 <div>
                   <h3 className="font-bold text-slate-800 flex items-center gap-2">
-                    <Edit3 size={18} className="text-blue-500" /> {isTopikMode ? 'Đề bài / Nội dung viết' : 'Văn bản cần luyện'}
+                    <Edit3 size={18} className="text-blue-500" /> {isTopikMode ? 'Đề bài / Nội dung viết' : 'Văn bản luyện viết'}
                   </h3>
-                  <p className="text-xs text-slate-400 mt-1">Nhập hoặc dán đoạn văn dài vào đây. Mỗi dòng sẽ là một bài tập viết.</p>
+                  <p className="text-xs text-slate-400 mt-1">Nhập câu dài vào đây. Mỗi dòng sẽ là một câu luyện viết.</p>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   <button
                     onClick={handleSmartSplit}
-                    className="px-3 py-1.5 bg-amber-50 text-amber-600 text-[10px] font-bold rounded-lg hover:bg-amber-100 transition-all border border-amber-100"
+                    className="flex-1 md:flex-none px-3 py-1.5 bg-amber-50 text-amber-600 text-[11px] font-bold rounded-lg hover:bg-amber-100 transition-all border border-amber-100 flex items-center justify-center gap-1.5"
                   >
-                    ✂️ Tách câu
+                    ✂️ Tách câu tự động
                   </button>
                   <button
                     onClick={() => setIsEditorExpanded(true)}
-                    className="px-3 py-1.5 bg-blue-50 text-blue-600 text-[10px] font-bold rounded-lg hover:bg-blue-100 transition-all border border-blue-100"
+                    className="flex-1 md:flex-none px-3 py-1.5 bg-blue-50 text-blue-600 text-[11px] font-bold rounded-lg hover:bg-blue-100 transition-all border border-blue-100 flex items-center justify-center gap-1.5"
                   >
-                    🔍 Toàn màn hình
+                    🔍 Kính lúp (Toàn màn hình)
                   </button>
                 </div>
               </div>
@@ -1146,8 +1146,8 @@ export default function Home() {
                 placeholder="Dán đoạn văn tiếng Hàn của bạn vào đây...&#10;&#10;Ví dụ:&#10;안녕하세요. (Chào bạn)&#10;만나서 반갑습니다. (Rất vui được gặp bạn)"
               />
             </div>
-            <div className="p-3 bg-white border-t border-slate-100 flex items-center justify-between px-6">
-              <div className="flex gap-4 text-xs">
+            <div className="p-3 bg-white border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between px-6 gap-3">
+              <div className="flex flex-wrap gap-4 text-xs">
                 <span className="text-slate-500 font-medium">Tổng ký tự: <b className="text-blue-600">{charStats.total}</b></span>
                 <span className="text-slate-500 font-medium">Không bao gồm dấu cách: <b className="text-blue-600">{charStats.noSpaces}</b></span>
               </div>
@@ -1158,6 +1158,17 @@ export default function Home() {
           </div>
         </div>
       )}
+
+      {/* Floating Action Button (Mobile Only) */}
+      <div className="md:hidden no-print fixed bottom-6 right-6 z-40">
+        <button
+          onClick={() => window.print()}
+          className="w-14 h-14 bg-blue-600 text-white rounded-full flex justify-center items-center shadow-xl border-2 border-white/20 active:scale-90 transition-transform"
+          title="In / Lưu PDF"
+        >
+          <Download size={24} />
+        </button>
+      </div>
     </div>
   );
 }
