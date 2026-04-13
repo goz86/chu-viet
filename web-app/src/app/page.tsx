@@ -778,7 +778,7 @@ export default function Home() {
         </div>
 
         {/* Main Workspace */}
-        <div className="flex flex-col items-start md:items-center min-w-max p-4 md:p-8 gap-8 print-container">
+        <div className="flex flex-col items-center p-4 md:p-8 gap-8 print-container w-full overflow-hidden">
           {/* Centralized Editor Section */}
           <div className="no-print w-full min-w-[320px] max-w-[210mm] animate-fade-in-up md:min-w-[0]">
             <div className="editor-card bg-white rounded-2xl shadow-lg border border-slate-200/80 overflow-hidden">
@@ -839,7 +839,10 @@ export default function Home() {
             </div>
           </div>
 
-          {pages.map((pageBlocks, pIdx) => (
+          {/* Render A4 Pages Grid with robust mobile wrap */}
+          <div className="w-full max-w-[100vw] overflow-x-auto pb-4 custom-scrollbar">
+            <div className="flex flex-col items-start sm:items-center gap-8 w-max mx-auto px-4 sm:px-0">
+              {pages.map((pageBlocks, pIdx) => (
             <div
               key={pIdx}
               className="worksheet-page bg-white relative"
@@ -1110,6 +1113,8 @@ export default function Home() {
               )}
             </div>
           ))}
+            </div>
+          </div>
         </div>
       </main>
       {/* Expanded Editor Overlay */}
