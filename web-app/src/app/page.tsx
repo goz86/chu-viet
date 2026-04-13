@@ -246,6 +246,7 @@ export default function Home() {
   const [isTopikMode, setIsTopikMode] = useState(false);
   const [gridColor, setGridColor] = useState('#bbb');
   const [isInterleaved, setIsInterleaved] = useState(false);
+  const [activePreset, setActivePreset] = useState<string>('Trung bình');
 
   // --- Character Stats ---
   const charStats = useMemo(() => {
@@ -343,6 +344,7 @@ export default function Home() {
 
   // ====== HANDLERS ======
   const applyPreset = (p: (typeof PRESETS)[number]) => {
+    setActivePreset(p.label);
     setGridCols(p.gridCols);
     setTraceRepeat(p.traceRepeat);
     setEmptyRows(p.emptyRows);
@@ -411,145 +413,162 @@ export default function Home() {
       {/* ═══════════════════════════════════════════
           SIDEBAR
           ═══════════════════════════════════════════ */}
-      <aside className="no-print w-full md:w-80 bg-white border-r border-slate-200 flex flex-col shadow-sm shrink-0 overflow-y-auto md:h-screen md:sticky md:top-0">
+      <aside className="no-print w-full md:w-80 flex flex-col shrink-0 md:h-screen md:sticky md:top-0" style={{ background: 'var(--sidebar-bg)' }}>
         {/* Title */}
-        <div className="p-5 border-b border-slate-100 flex items-center gap-3">
+        <div className="p-5 flex items-center gap-3" style={{ borderBottom: '1px solid var(--sidebar-border)' }}>
           <img
             src="/logo.png"
             alt="App Logo"
-            className="w-12 h-12 rounded-xl shadow-sm border border-slate-100 object-cover"
+            className="w-11 h-11 rounded-xl object-cover"
+            style={{ boxShadow: '0 0 0 2px rgba(59,130,246,0.3)', border: '2px solid rgba(255,255,255,0.1)' }}
           />
           <div>
-            <h1 className="text-xl font-bold text-slate-800">Luyện chữ Hàn</h1>
-            <p className="text-[10px] text-slate-400 mt-0.5 leading-tight">
-              Tạo bài tập viết chữ Hàn chuyên nghiệp · Xuất PDF chuẩn A4
+            <h1 className="text-lg font-extrabold" style={{ color: 'var(--sidebar-text-bright)' }}>Luyện chữ Hàn</h1>
+            <p className="text-[10px] mt-0.5 leading-tight" style={{ color: 'var(--sidebar-text-muted)' }}>
+              Tạo bài tập viết chữ Hàn · Xuất PDF chuẩn A4
             </p>
           </div>
         </div>
 
         {/* Presets */}
-        <div className="p-4 border-b border-slate-100">
-          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
-            ⚡ Preset nhanh
+        <div className="p-4" style={{ borderBottom: '1px solid var(--sidebar-border)' }}>
+          <p className="text-[10px] font-bold uppercase tracking-[0.15em] mb-3" style={{ color: 'var(--sidebar-text-muted)' }}>
+            ⚡ Chọn nhanh
           </p>
-          <div className="flex gap-2">
+          <div className="grid grid-cols-4 gap-2">
             {PRESETS.map((p) => (
               <button
                 key={p.label}
                 onClick={() => applyPreset(p)}
                 title={p.desc}
-                className="flex-1 px-2 py-2.5 rounded-lg border border-slate-200 hover:border-blue-400 hover:bg-blue-50 transition-all text-center active:scale-95"
+                className="relative px-2 py-3 rounded-xl text-center transition-all duration-200 active:scale-95"
+                style={{
+                  background: activePreset === p.label ? 'rgba(59,130,246,0.15)' : 'var(--sidebar-surface)',
+                  border: activePreset === p.label ? '1.5px solid rgba(59,130,246,0.5)' : '1.5px solid transparent',
+                  boxShadow: activePreset === p.label ? '0 0 12px rgba(59,130,246,0.2)' : 'none',
+                }}
               >
                 <div className="text-lg">{p.emoji}</div>
-                <div className="text-xs font-medium text-slate-600 mt-0.5">
+                <div className="text-[10px] font-semibold mt-1" style={{ color: activePreset === p.label ? '#93c5fd' : 'var(--sidebar-text)' }}>
                   {p.label}
                 </div>
+                {activePreset === p.label && (
+                  <div className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full animate-pulse-subtle" style={{ background: 'var(--accent)' }} />
+                )}
               </button>
             ))}
           </div>
         </div>
 
         {/* Scrollable Settings */}
-        <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3">
+        <div className="flex-1 overflow-y-auto dark-scrollbar p-4 flex flex-col gap-2">
           {/* --- Grid Layout --- */}
           <details open>
-            <summary className="cursor-pointer text-sm font-semibold text-slate-700 py-1.5 select-none">
-              📐 Bố cục lưới
+            <summary className="cursor-pointer text-[11px] font-bold uppercase tracking-[0.12em] py-2 select-none flex items-center gap-2" style={{ color: 'var(--sidebar-text-muted)' }}>
+              <span style={{ color: 'var(--sidebar-text)' }}>📐</span> Bố cục lưới
             </summary>
-            <div className="mt-2 flex flex-col gap-3 pl-1">
+            <div className="mt-1 flex flex-col gap-4 pl-0.5">
               <div>
-                <label className="text-xs text-slate-500">
-                  Số ô mỗi hàng:{' '}
-                  <strong className="text-blue-600">{gridCols}</strong>
-                </label>
+                <div className="flex justify-between items-baseline mb-1">
+                  <span className="text-[11px] font-medium" style={{ color: 'var(--sidebar-text)' }}>Số ô mỗi hàng</span>
+                  <span className="text-sm font-black" style={{ color: '#93c5fd' }}>{gridCols}</span>
+                </div>
                 <input
                   type="range"
                   min="6"
                   max="25"
                   value={gridCols}
                   onChange={(e) => setGridCols(+e.target.value)}
-                  className="w-full accent-blue-500"
+                  className="dark-slider"
                 />
-                <p className="text-xs text-slate-400">
+                <p className="text-[10px] mt-1" style={{ color: 'var(--sidebar-text-muted)' }}>
                   Cỡ ô: {cellW.toFixed(1)}mm × {cellH.toFixed(1)}mm
                 </p>
               </div>
               <div>
-                <label className="text-xs text-slate-500">
-                  Số dòng đồ mờ:{' '}
-                  <strong className="text-blue-600">{traceRepeat}</strong>
-                </label>
+                <div className="flex justify-between items-baseline mb-1">
+                  <span className="text-[11px] font-medium" style={{ color: 'var(--sidebar-text)' }}>Số dòng đồ mờ</span>
+                  <span className="text-sm font-black" style={{ color: '#93c5fd' }}>{traceRepeat}</span>
+                </div>
                 <input
                   type="range"
                   min="0"
                   max="3"
                   value={traceRepeat}
                   onChange={(e) => setTraceRepeat(+e.target.value)}
-                  className="w-full accent-blue-500"
+                  className="dark-slider"
                 />
               </div>
               <div>
-                <label className="text-xs text-slate-500">
-                  Số dòng trống:{' '}
-                  <strong className="text-blue-600">{emptyRows}</strong>
-                </label>
+                <div className="flex justify-between items-baseline mb-1">
+                  <span className="text-[11px] font-medium" style={{ color: 'var(--sidebar-text)' }}>Số dòng trống</span>
+                  <span className="text-sm font-black" style={{ color: '#93c5fd' }}>{emptyRows}</span>
+                </div>
                 <input
                   type="range"
                   min="0"
                   max="50"
                   value={emptyRows}
                   onChange={(e) => setEmptyRows(+e.target.value)}
-                  className="w-full accent-blue-500"
+                  className="dark-slider"
                 />
               </div>
-              <label className="flex items-center gap-2 text-xs text-slate-600 cursor-pointer mt-1">
+              <label className="flex items-center gap-2.5 text-[11px] cursor-pointer mt-2" style={{ color: 'var(--sidebar-text)' }}>
                 <input
                   type="checkbox"
                   checked={showGuides}
                   onChange={(e) => setShowGuides(e.target.checked)}
-                  className="accent-blue-500"
+                  className="dark-checkbox"
                 />
                 Hiện đường dẫn chữ thập (+)
               </label>
 
-              <label className="flex items-center gap-2 text-xs text-slate-600 cursor-pointer mt-1">
+              <label className="flex items-center gap-2.5 text-[11px] cursor-pointer mt-1" style={{ color: '#93c5fd' }}>
                 <input
                   type="checkbox"
                   checked={isInterleaved}
                   onChange={(e) => setIsInterleaved(e.target.checked)}
-                  className="accent-blue-500"
+                  className="dark-checkbox"
                 />
-                <span className="font-semibold text-blue-600">🔄 Chế độ xen kẽ hàng</span>
+                <span className="font-semibold">🔄 Chế độ xen kẽ hàng</span>
               </label>
 
-              <div className="mt-4 pt-4 border-t border-slate-100">
-                <label className="block text-xs font-semibold text-slate-700 mb-2">
+              <div className="mt-4 pt-4" style={{ borderTop: '1px solid var(--sidebar-border)' }}>
+                <label className="block text-[10px] font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--sidebar-text-muted)' }}>
                   🎨 Màu đường kẻ ô
                 </label>
-                <div className="flex gap-2">
+                <div className="flex gap-2.5">
                   {GRID_COLORS.map((c) => (
                     <button
                       key={c.value}
                       onClick={() => setGridColor(c.value)}
-                      className={`w-6 h-6 rounded-full border-2 transition-all ${
-                        gridColor === c.value
-                          ? 'border-blue-500 scale-110'
-                          : 'border-transparent opacity-60 hover:opacity-100'
-                      } ${c.tailwind}`}
+                      className={`w-7 h-7 rounded-full transition-all duration-200 ${c.tailwind}`}
+                      style={{
+                        border: gridColor === c.value ? '2.5px solid #3b82f6' : '2.5px solid rgba(255,255,255,0.1)',
+                        transform: gridColor === c.value ? 'scale(1.15)' : 'scale(1)',
+                        boxShadow: gridColor === c.value ? '0 0 8px rgba(59,130,246,0.4)' : 'none',
+                      }}
                       title={c.label}
                     />
                   ))}
                 </div>
               </div>
 
-              <div className="mt-4 pt-4 border-t border-slate-100">
+              <div className="mt-4 pt-4" style={{ borderTop: '1px solid var(--sidebar-border)' }}>
                 <button
                   onClick={() => {
                     setText('');
                     setEmptyRows(20);
                     setTraceRepeat(0);
                   }}
-                  className="w-full py-2 px-3 border border-dashed border-slate-300 text-slate-500 text-xs font-medium rounded-lg hover:bg-slate-50 hover:text-slate-700 transition-all flex items-center justify-center gap-2"
+                  className="w-full py-2 px-3 text-[11px] font-medium rounded-lg transition-all flex items-center justify-center gap-2"
+                  style={{
+                    border: '1px dashed rgba(255,255,255,0.15)',
+                    color: 'var(--sidebar-text)',
+                    background: 'transparent',
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--sidebar-surface-hover)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
                 >
                   🧹 Dọn dẹp & Tạo trang trắng
                 </button>
@@ -559,59 +578,62 @@ export default function Home() {
 
           {/* --- Style --- */}
           <details>
-            <summary className="cursor-pointer text-sm font-semibold text-slate-700 py-1.5 select-none">
-              🎨 Kiểu dáng
+            <summary className="cursor-pointer text-[11px] font-bold uppercase tracking-[0.12em] py-2 select-none flex items-center gap-2" style={{ color: 'var(--sidebar-text-muted)' }}>
+              <span style={{ color: 'var(--sidebar-text)' }}>🎨</span> Kiểu dáng
             </summary>
-            <div className="mt-2 flex flex-col gap-3 pl-1">
+            <div className="mt-1 flex flex-col gap-4 pl-0.5">
               <div>
-                <label className="text-xs text-slate-500 mb-1.5 block">
+                <label className="text-[10px] font-bold uppercase tracking-wider mb-2 block" style={{ color: 'var(--sidebar-text-muted)' }}>
                   Màu nền dòng mẫu
                 </label>
-                <div className="flex gap-2">
+                <div className="flex gap-2.5">
                   {BG_COLORS.map((c) => (
                     <button
                       key={c.value}
                       onClick={() => setExampleBg(c.value)}
-                      className={`w-8 h-8 rounded-full border-2 transition-all ${
-                        exampleBg === c.value
-                          ? 'border-blue-500 scale-110 shadow-md'
-                          : 'border-slate-200 hover:border-slate-300'
-                      }`}
-                      style={{ backgroundColor: c.value }}
+                      className="w-7 h-7 rounded-full transition-all duration-200"
+                      style={{
+                        backgroundColor: c.value,
+                        border: exampleBg === c.value ? '2.5px solid #3b82f6' : '2.5px solid rgba(255,255,255,0.15)',
+                        transform: exampleBg === c.value ? 'scale(1.15)' : 'scale(1)',
+                        boxShadow: exampleBg === c.value ? '0 0 8px rgba(59,130,246,0.4)' : 'none',
+                      }}
                       title={c.label}
                     />
                   ))}
                 </div>
               </div>
               <div>
-                <label className="text-xs text-slate-500 mb-1.5 block">
+                <label className="text-[10px] font-bold uppercase tracking-wider mb-2 block" style={{ color: 'var(--sidebar-text-muted)' }}>
                   Kiểu viền ô
                 </label>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setBorderStyle('solid')}
-                    className={`flex-1 py-1.5 rounded-lg border text-xs font-medium transition-all ${
-                      borderStyle === 'solid'
-                        ? 'border-blue-500 bg-blue-50 text-blue-700'
-                        : 'border-slate-200 text-slate-500 hover:border-slate-300'
-                    }`}
+                    className="flex-1 py-1.5 rounded-lg text-[11px] font-semibold transition-all"
+                    style={{
+                      background: borderStyle === 'solid' ? 'rgba(59,130,246,0.15)' : 'var(--sidebar-surface)',
+                      border: borderStyle === 'solid' ? '1.5px solid rgba(59,130,246,0.4)' : '1.5px solid transparent',
+                      color: borderStyle === 'solid' ? '#93c5fd' : 'var(--sidebar-text)',
+                    }}
                   >
                     ── Nét liền
                   </button>
                   <button
                     onClick={() => setBorderStyle('dashed')}
-                    className={`flex-1 py-1.5 rounded-lg border text-xs font-medium transition-all ${
-                      borderStyle === 'dashed'
-                        ? 'border-blue-500 bg-blue-50 text-blue-700'
-                        : 'border-slate-200 text-slate-500 hover:border-slate-300'
-                    }`}
+                    className="flex-1 py-1.5 rounded-lg text-[11px] font-semibold transition-all"
+                    style={{
+                      background: borderStyle === 'dashed' ? 'rgba(59,130,246,0.15)' : 'var(--sidebar-surface)',
+                      border: borderStyle === 'dashed' ? '1.5px solid rgba(59,130,246,0.4)' : '1.5px solid transparent',
+                      color: borderStyle === 'dashed' ? '#93c5fd' : 'var(--sidebar-text)',
+                    }}
                   >
                     - - Nét đứt
                   </button>
                 </div>
               </div>
               <div>
-                <label className="text-xs text-slate-500 mb-1.5 block">
+                <label className="text-[10px] font-bold uppercase tracking-wider mb-2 block" style={{ color: 'var(--sidebar-text-muted)' }}>
                   Phông chữ Hàn
                 </label>
                 <div className="flex flex-col gap-1.5">
@@ -619,19 +641,19 @@ export default function Home() {
                     <button
                       key={f.value}
                       onClick={() => setSelectedFont(f)}
-                      className={`w-full px-3 py-2 rounded-lg border text-left transition-all ${
-                        selectedFont.value === f.value
-                          ? 'border-blue-500 bg-blue-50'
-                          : 'border-slate-200 hover:border-slate-300'
-                      }`}
+                      className="w-full px-3 py-2 rounded-lg text-left transition-all duration-200"
+                      style={{
+                        background: selectedFont.value === f.value ? 'rgba(59,130,246,0.12)' : 'var(--sidebar-surface)',
+                        border: selectedFont.value === f.value ? '1.5px solid rgba(59,130,246,0.4)' : '1.5px solid transparent',
+                      }}
                     >
                       <span
-                        style={{ fontFamily: `'${f.value}', ${f.style}` }}
-                        className="text-sm text-slate-700"
+                        style={{ fontFamily: `'${f.value}', ${f.style}`, color: selectedFont.value === f.value ? '#93c5fd' : 'var(--sidebar-text)' }}
+                        className="text-sm"
                       >
                         한글 가나다 - {f.label}
                       </span>
-                      <span className="text-xs text-slate-400 block">
+                      <span className="text-[10px] block mt-0.5" style={{ color: 'var(--sidebar-text-muted)' }}>
                         {f.desc}
                       </span>
                     </button>
@@ -643,65 +665,69 @@ export default function Home() {
 
           {/* --- Page Settings --- */}
           <details>
-            <summary className="cursor-pointer text-sm font-semibold text-slate-700 py-1.5 select-none">
-              📄 Trang giấy
+            <summary className="cursor-pointer text-[11px] font-bold uppercase tracking-[0.12em] py-2 select-none flex items-center gap-2" style={{ color: 'var(--sidebar-text-muted)' }}>
+              <span style={{ color: 'var(--sidebar-text)' }}>📄</span> Trang giấy
             </summary>
-            <div className="mt-2 flex flex-col gap-3 pl-1">
+            <div className="mt-1 flex flex-col gap-4 pl-0.5">
               <div>
-                <label className="text-xs text-slate-500 mb-1 block">
+                <label className="text-[10px] font-bold uppercase tracking-wider mb-1.5 block" style={{ color: 'var(--sidebar-text-muted)' }}>
                   Tiêu đề
                 </label>
                 <input
                   type="text"
                   value={headerText}
                   onChange={(e) => setHeaderText(e.target.value)}
-                  className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-sm outline-none focus:border-blue-400 transition-all"
+                  className="w-full px-3 py-1.5 rounded-lg text-sm outline-none transition-all"
+                  style={{ background: 'var(--sidebar-surface)', border: '1.5px solid var(--sidebar-border)', color: 'var(--sidebar-text-bright)' }}
                 />
               </div>
               <div>
-                <label className="text-xs text-slate-500 mb-1 block">
+                <label className="text-[10px] font-bold uppercase tracking-wider mb-1.5 block" style={{ color: 'var(--sidebar-text-muted)' }}>
                   Phụ đề
                 </label>
                 <input
                   type="text"
                   value={subText}
                   onChange={(e) => setSubText(e.target.value)}
-                  className="w-full px-3 py-1.5 rounded-lg border border-slate-200 text-sm outline-none focus:border-blue-400 transition-all"
+                  className="w-full px-3 py-1.5 rounded-lg text-sm outline-none transition-all"
+                  style={{ background: 'var(--sidebar-surface)', border: '1.5px solid var(--sidebar-border)', color: 'var(--sidebar-text-bright)' }}
                 />
               </div>
-              <label className="flex items-center gap-2 text-xs text-slate-600 cursor-pointer">
+              <label className="flex items-center gap-2.5 text-[11px] cursor-pointer" style={{ color: 'var(--sidebar-text)' }}>
                 <input
                   type="checkbox"
                   checked={showMeta}
                   onChange={(e) => setShowMeta(e.target.checked)}
-                  className="accent-blue-500"
+                  className="dark-checkbox"
                 />
                 Hiện ô ghi 월 / 일 / 이름
               </label>
               <div>
-                <label className="text-xs text-slate-500 mb-1.5 block">
+                <label className="text-[10px] font-bold uppercase tracking-wider mb-2 block" style={{ color: 'var(--sidebar-text-muted)' }}>
                   Hướng giấy
                 </label>
                 <div className="flex gap-2">
                   <button
                     onClick={() => setOrientation('portrait')}
-                    className={`flex-1 py-1.5 rounded-lg border text-xs font-medium transition-all ${
-                      orientation === 'portrait'
-                        ? 'border-blue-500 bg-blue-50 text-blue-700'
-                        : 'border-slate-200 text-slate-500 hover:border-slate-300'
-                    }`}
+                    className="flex-1 py-1.5 rounded-lg text-[11px] font-semibold transition-all"
+                    style={{
+                      background: orientation === 'portrait' ? 'rgba(59,130,246,0.15)' : 'var(--sidebar-surface)',
+                      border: orientation === 'portrait' ? '1.5px solid rgba(59,130,246,0.4)' : '1.5px solid transparent',
+                      color: orientation === 'portrait' ? '#93c5fd' : 'var(--sidebar-text)',
+                    }}
                   >
-                    📃 Dọc (Portrait)
+                    📃 Dọc
                   </button>
                   <button
                     onClick={() => setOrientation('landscape')}
-                    className={`flex-1 py-1.5 rounded-lg border text-xs font-medium transition-all ${
-                      orientation === 'landscape'
-                        ? 'border-blue-500 bg-blue-50 text-blue-700'
-                        : 'border-slate-200 text-slate-500 hover:border-slate-300'
-                    }`}
+                    className="flex-1 py-1.5 rounded-lg text-[11px] font-semibold transition-all"
+                    style={{
+                      background: orientation === 'landscape' ? 'rgba(59,130,246,0.15)' : 'var(--sidebar-surface)',
+                      border: orientation === 'landscape' ? '1.5px solid rgba(59,130,246,0.4)' : '1.5px solid transparent',
+                      color: orientation === 'landscape' ? '#93c5fd' : 'var(--sidebar-text)',
+                    }}
                   >
-                    📄 Ngang (Landscape)
+                    📄 Ngang
                   </button>
                 </div>
               </div>
@@ -710,42 +736,39 @@ export default function Home() {
         </div>
 
         {/* Download Button */}
-        <div className="p-4 border-t border-slate-100">
+        <div className="p-4" style={{ borderTop: '1px solid var(--sidebar-border)' }}>
           <button
             onClick={() => window.print()}
-            className="w-full py-3 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all active:scale-[0.98]"
+            className="btn-download w-full py-3.5 text-white font-bold rounded-xl text-sm tracking-wide"
           >
             📥 Tải xuống PDF ({totalPages} trang)
           </button>
-          <div className="mt-3 p-3 bg-amber-50 border border-amber-100 rounded-lg">
-            <p className="text-[10px] text-amber-800 font-bold uppercase mb-1">💡 Mẹo in chuẩn A4:</p>
-            <ul className="text-[10px] text-amber-700 space-y-1 list-disc pl-3 leading-tight">
-              <li>Lề (Margins): Chọn <strong>None</strong></li>
-              <li>Tỷ lệ (Scale): Chọn <strong>100%</strong></li>
-              <li>Tùy chọn: Bật <strong>Background Graphics</strong></li>
+          <div className="mt-3 p-2.5 rounded-lg" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid var(--sidebar-border)' }}>
+            <p className="text-[9px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'var(--sidebar-text-muted)' }}>💡 Mẹo in chuẩn A4</p>
+            <ul className="text-[9px] space-y-1 list-disc pl-3 leading-tight" style={{ color: 'var(--sidebar-text)' }}>
+              <li>Lề: <strong className="text-white">None</strong></li>
+              <li>Tỷ lệ: <strong className="text-white">100%</strong></li>
+              <li>Bật <strong className="text-white">Background Graphics</strong></li>
             </ul>
           </div>
-          <p className="text-[10px] text-slate-400 text-center mt-2 px-2">
-            Chọn <strong>&quot;Save as PDF&quot;</strong> trong hộp thoại in của trình duyệt
-          </p>
         </div>
       </aside>
 
       {/* ═══════════════════════════════════════════
           MAIN PREVIEW AREA
           ═══════════════════════════════════════════ */}
-      <main className="flex-1 overflow-y-auto overflow-x-auto bg-slate-200/50">
+      <main className="flex-1 overflow-y-auto overflow-x-auto" style={{ background: 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%)' }}>
         {/* Toolbar */}
-        <div className="no-print p-3 px-5 bg-white border-b border-slate-200 flex items-center justify-between shadow-sm sticky top-0 z-10">
-          <h2 className="text-sm font-semibold text-slate-600">
+        <div className="no-print glass-toolbar p-3 px-5 flex items-center justify-between sticky top-0 z-10">
+          <h2 className="text-sm font-bold text-slate-700 tracking-wide">
             👀 Bản xem trước
           </h2>
           <div className="flex items-center gap-3">
-            <span className="text-xs text-slate-500">
+            <span className="text-[11px] text-slate-500 font-medium">
               {blocks.length} câu · {totalPages} trang ·{' '}
-              {orientation === 'portrait' ? 'Dọc' : 'Ngang'}
+              {orientation === 'portrait' ? 'Đứng' : 'Ngang'}
             </span>
-            <span className="text-xs bg-green-100 text-green-700 px-2.5 py-0.5 rounded-full font-medium">
+            <span className="text-[10px] bg-emerald-50 text-emerald-600 px-2.5 py-1 rounded-full font-bold border border-emerald-100">
               ● Live
             </span>
           </div>
@@ -754,8 +777,8 @@ export default function Home() {
         {/* Main Workspace */}
         <div className="flex flex-col items-center p-4 md:p-8 gap-8 print-container">
           {/* Centralized Editor Section */}
-          <div className="no-print w-full max-w-[210mm] animate-in fade-in slide-in-from-top-4 duration-500">
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+          <div className="no-print w-full max-w-[210mm] animate-fade-in-up">
+            <div className="editor-card bg-white rounded-2xl shadow-lg border border-slate-200/80 overflow-hidden">
               <div className="p-4 border-b border-slate-100 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="text-lg">📝</span>
