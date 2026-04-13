@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+@import "tailwindcss";
+
+/* ========== Screen: Worksheet Page Appearance ========== */
+@media screen {
+  .worksheet-page {
+    box-shadow: 0 2px 24px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e2e8f0;
+  }
+}
+
+/* ========== Print: Core Rules ========== */
+@media print {
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
