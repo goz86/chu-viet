@@ -431,42 +431,6 @@ export default function Home() {
 
         {/* Scrollable Settings */}
         <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3">
-          {/* --- Text Input --- */}
-          <div>
-            <div className="flex items-center justify-between mb-1">
-              <label className="block text-sm font-semibold text-slate-700">
-                📝 Văn bản cần luyện
-              </label>
-              <button
-                onClick={() => setIsEditorExpanded(true)}
-                className="text-[10px] font-medium bg-blue-50 text-blue-600 px-2 py-0.5 rounded hover:bg-blue-100 transition-colors"
-              >
-                🔍 Mở rộng
-              </button>
-            </div>
-            <textarea
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              className="w-full p-3 rounded-lg border border-slate-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 outline-none transition-all resize-y text-sm text-slate-700 leading-relaxed"
-              style={{ minHeight: '8rem', maxHeight: '50vh' }}
-              placeholder="Mỗi dòng là một câu..."
-            />
-            <div className="flex justify-between mt-1 items-center">
-              <p className="text-xs text-slate-400">
-                {blocks.length} câu · {totalPages} trang
-              </p>
-              <div className="flex gap-2 text-[10px] bg-slate-50 px-2 py-0.5 rounded border border-slate-100">
-                <span className="text-slate-500">Tất cả: <b className="text-blue-600">{charStats.total}</b></span>
-                <span className="text-slate-500">K.cách: <b className="text-blue-600">{charStats.noSpaces}</b></span>
-              </div>
-            </div>
-            {maxWrapRows > 2 && !isTopikMode && (
-              <p className="text-xs text-amber-600 mt-1">
-                ⚠ Câu dài ({longestCharCount} ký tự → {maxWrapRows} hàng)
-              </p>
-            )}
-          </div>
-
           {/* --- Grid Layout --- */}
           <details open>
             <summary className="cursor-pointer text-sm font-semibold text-slate-700 py-1.5 select-none">
@@ -749,8 +713,68 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Pages */}
+        {/* Main Workspace */}
         <div className="flex flex-col items-center p-4 md:p-8 gap-8">
+          {/* Centralized Editor Section */}
+          <div className="no-print w-full max-w-[210mm] animate-in fade-in slide-in-from-top-4 duration-500">
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+              <div className="p-4 border-b border-slate-100 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">📝</span>
+                  <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wide">
+                    {isTopikMode ? 'Đề bài / Nội dung viết' : 'Văn bản cần luyện'}
+                  </h2>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={handleSmartSplit}
+                    className="px-3 py-1.5 bg-amber-50 text-amber-600 text-[10px] font-bold rounded-lg hover:bg-amber-100 transition-all border border-amber-100"
+                  >
+                    ✂️ Tách câu
+                  </button>
+                  <button
+                    onClick={() => setIsEditorExpanded(true)}
+                    className="px-3 py-1.5 bg-blue-50 text-blue-600 text-[10px] font-bold rounded-lg hover:bg-blue-100 transition-all border border-blue-100"
+                  >
+                    🔍 Toàn màn hình
+                  </button>
+                </div>
+              </div>
+              <div className="p-5">
+                <textarea
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                  className="w-full min-h-[120px] p-4 rounded-xl border-2 border-slate-100 focus:border-blue-400 focus:ring-4 focus:ring-blue-50 outline-none transition-all text-base text-slate-700 leading-relaxed font-medium"
+                  placeholder={isTopikMode ? "Nhập đề bài hoặc nội dung bài luận TOPIK tại đây..." : "Nhập câu tiếng Hàn của bạn tại đây..."}
+                />
+                <div className="flex justify-between mt-3 items-center">
+                  <div className="flex gap-4">
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="text-[10px] text-slate-400 font-bold uppercase">Tổng ký tự</span>
+                      <span className="text-lg font-black text-blue-600 leading-none">{charStats.total}</span>
+                    </div>
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="text-[10px] text-slate-400 font-bold uppercase">Không cách</span>
+                      <span className="text-lg font-black text-slate-600 leading-none">{charStats.noSpaces}</span>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-tight">Dự kiến</p>
+                    <p className="text-xs font-bold text-slate-700">{totalPages} trang PDF</p>
+                  </div>
+                </div>
+                {maxWrapRows > 2 && !isTopikMode && (
+                  <div className="mt-4 p-3 bg-amber-50 border border-amber-100 rounded-lg flex items-center gap-3">
+                    <span className="text-xl">⚠</span>
+                    <p className="text-xs text-amber-700 font-medium leading-tight">
+                      <b>Câu quá dài:</b> Hàng mẫu có {longestCharCount} ký tự và sẽ được ngắt thành {maxWrapRows} dòng. Hãy xem lại nếu bạn muốn khống chế trên 1 dòng.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
           {pages.map((pageBlocks, pIdx) => (
             <div
               key={pIdx}
