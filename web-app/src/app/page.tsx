@@ -739,8 +739,12 @@ export default function Home() {
         {/* Download Button */}
         <div className="p-4" style={{ borderTop: '1px solid var(--sidebar-border)' }}>
           <button
-            onClick={() => window.print()}
-            className="btn-download w-full py-3.5 text-white font-bold rounded-xl text-sm tracking-wide flex items-center justify-center gap-2"
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              setTimeout(() => window.print(), 100);
+            }}
+            className="btn-download w-full py-3.5 text-white font-bold rounded-xl text-sm tracking-wide flex items-center justify-center gap-2 cursor-pointer"
           >
             <Download size={18} /> Tải xuống PDF ({totalPages} trang)
           </button>
@@ -1165,13 +1169,17 @@ export default function Home() {
       )}
 
       {/* Floating Action Button (Mobile Only) */}
-      <div className="md:hidden no-print fixed bottom-6 right-6 z-40">
+      <div className="md:hidden no-print fixed bottom-6 right-6 z-[100] pointer-events-auto shadow-2xl rounded-full">
         <button
-          onClick={() => window.print()}
-          className="w-14 h-14 bg-blue-600 text-white rounded-full flex justify-center items-center shadow-xl border-2 border-white/20 active:scale-90 transition-transform"
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            setTimeout(() => window.print(), 100);
+          }}
+          className="w-14 h-14 bg-blue-600 text-white rounded-full flex justify-center items-center shadow-xl border-2 border-white/20 active:scale-95 transition-transform cursor-pointer"
           title="In / Lưu PDF"
         >
-          <Download size={24} />
+          <Download size={24} className="pointer-events-none" />
         </button>
       </div>
     </div>
