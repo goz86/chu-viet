@@ -109,7 +109,7 @@ function Cell({
   borderStyle: string;
   showGuides?: boolean;
 }) {
-  const renderGuides = showGuides && !ch;
+  const renderGuides = showGuides;
 
   return (
     <div
@@ -135,22 +135,22 @@ function Cell({
           {/* Vertical center line */}
           <div style={{
             position: 'absolute',
-            top: '15%',
-            bottom: '15%',
+            top: '10%',
+            bottom: '10%',
             left: '50%',
             width: 0,
-            borderLeft: '1px dashed #ccc',
-            transform: 'translateX(-0.5px)',
+            borderLeft: '0.8px dashed rgba(200, 200, 200, 0.6)',
+            transform: 'translateX(-0.4px)',
           }} />
           {/* Horizontal center line */}
           <div style={{
             position: 'absolute',
-            left: '15%',
-            right: '15%',
+            left: '10%',
+            right: '10%',
             top: '50%',
             height: 0,
-            borderTop: '1px dashed #ccc',
-            transform: 'translateY(-0.5px)',
+            borderTop: '0.8px dashed rgba(200, 200, 200, 0.6)',
+            transform: 'translateY(-0.4px)',
           }} />
         </>
       )}
@@ -233,6 +233,7 @@ export default function Home() {
   const [borderStyle, setBorderStyle] = useState<'solid' | 'dashed'>('solid');
   const [selectedFont, setSelectedFont] = useState(KOREAN_FONTS[0]);
   const [showGuides, setShowGuides] = useState(true);
+  const [isEditorExpanded, setIsEditorExpanded] = useState(false);
 
   // --- Page Settings ---
   const [headerText, setHeaderText] = useState('한글공부');
@@ -312,6 +313,18 @@ export default function Home() {
     setGridCols(p.gridCols);
     setTraceRepeat(p.traceRepeat);
     setEmptyRows(p.emptyRows);
+    setExampleBg(p.bg);
+  };
+
+  const handleSmartSplit = () => {
+    if (!text.trim()) return;
+    // Split by common Korean sentence endings, then clean up
+    const sentences = text
+      .replace(/([.?!])\s*/g, '$1\n')
+      .split('\n')
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0);
+    setText(sentences.join('\n'));
   };
 
   // ====== RENDER ======
@@ -382,14 +395,22 @@ export default function Home() {
         <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3">
           {/* --- Text Input --- */}
           <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-1">
-              📝 Văn bản cần luyện
-            </label>
+            <div className="flex items-center justify-between mb-1">
+              <label className="block text-sm font-semibold text-slate-700">
+                📝 Văn bản cần luyện
+              </label>
+              <button
+                onClick={() => setIsEditorExpanded(true)}
+                className="text-[10px] font-medium bg-blue-50 text-blue-600 px-2 py-0.5 rounded hover:bg-blue-100 transition-colors"
+              >
+                🔍 Mở rộng
+              </button>
+            </div>
             <textarea
               value={text}
               onChange={(e) => setText(e.target.value)}
               className="w-full p-3 rounded-lg border border-slate-200 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 outline-none transition-all resize-y text-sm text-slate-700 leading-relaxed"
-              style={{ minHeight: '7rem', maxHeight: '50vh' }}
+              style={{ minHeight: '8rem', maxHeight: '50vh' }}
               placeholder="Mỗi dòng là một câu..."
             />
             <div className="flex justify-between mt-1">
@@ -796,6 +817,7 @@ export default function Home() {
                           borderColor="#bbb"
                           borderStyle={borderStyle}
                           fontFamily={`'${selectedFont.value}', ${selectedFont.style}`}
+                          showGuides={showGuides}
                         />
                       ))
                     )}
@@ -849,6 +871,48 @@ export default function Home() {
           ))}
         </div>
       </main>
+      {/* Expanded Editor Overlay */}
+      {isEditorExpanded && (
+        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white w-full max-w-4xl h-[80vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div className="p-4 border-b border-slate-100 flex items-center justify-between bg-white sticky top-0">
+              <div>
+                <h3 className="font-bold text-slate-800">Soạn thảo văn bản luyện tập</h3>
+                <p className="text-xs text-slate-400">Nhập hoặc dán đoạn văn dài vào đây. Mỗi dòng sẽ là một bài tập viết.</p>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={handleSmartSplit}
+                  className="px-3 py-1.5 bg-amber-50 text-amber-600 text-xs font-semibold rounded-lg hover:bg-amber-100 transition-all border border-amber-100"
+                  title="Tách đoạn văn thành các câu riêng biệt dựa trên dấu chấm"
+                >
+                  ✂️ Tự động tách câu
+                </button>
+                <button
+                  onClick={() => setIsEditorExpanded(false)}
+                  className="px-4 py-1.5 bg-blue-600 text-white text-xs font-semibold rounded-lg hover:bg-blue-700 transition-all shadow-md shadow-blue-100"
+                >
+                  Xong
+                </button>
+              </div>
+            </div>
+            <div className="flex-1 p-6 bg-slate-50">
+              <textarea
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                autoFocus
+                className="w-full h-full p-6 rounded-xl border-2 border-slate-200 focus:border-blue-400 focus:ring-4 focus:ring-blue-50 outline-none transition-all text-base text-slate-700 leading-relaxed font-medium shadow-inner"
+                placeholder="Dán đoạn văn tiếng Hàn của bạn vào đây...&#10;&#10;Ví dụ:&#10;안녕하세요. (Chào bạn)&#10;만나서 반갑습니다. (Rất vui được gặp bạn)"
+              />
+            </div>
+            <div className="p-3 bg-white border-t border-slate-100 text-center">
+              <p className="text-xs text-slate-400">
+                💡 Mẹo: Nhấn <b>"Tự động tách câu"</b> để app tự xuống dòng sau mỗi dấu chấm.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
