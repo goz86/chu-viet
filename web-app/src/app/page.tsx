@@ -848,7 +848,7 @@ export default function Home() {
                 minHeight: `${pageH}mm`,
                 padding: `${MARGIN_MM}mm`,
                 boxSizing: 'border-box',
-                fontFamily: `'Nunito', 'Nanum Gothic', sans-serif`,
+                fontFamily: `'Be Vietnam Pro', 'Nanum Gothic', sans-serif`,
                 display: 'flex',
                 flexDirection: 'column',
               }}
@@ -860,17 +860,17 @@ export default function Home() {
                   <div className="flex flex-col mb-6 p-2 border-2" style={{ borderColor: gridColor }}>
                     <div className="flex justify-between items-end border-b pb-1 mb-2" style={{ borderColor: gridColor }}>
                       <h2 className="text-2xl font-black tracking-widest" style={{ color: gridColor }}>TOPIK 원고지</h2>
-                      <div className="flex gap-4 text-[10px] font-bold" style={{ color: gridColor }}>
+                      <div className="flex gap-4 text-[11px] font-black" style={{ color: gridColor }}>
                         <span>Câu số: [ &nbsp;&nbsp;&nbsp; ]</span>
                         <span>Số chữ: [ &nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp; ]</span>
                       </div>
                     </div>
-                    <div className="flex justify-between text-[9px] font-bold" style={{ color: gridColor }}>
+                    <div className="flex justify-between text-[10px] font-black" style={{ color: gridColor }}>
                       <div className="flex gap-6">
                         <span>Họ tên: ...........................................</span>
                         <span>SBD: ............................</span>
                       </div>
-                      <span className="opacity-60">Trang {pIdx + 1} / {totalPages}</span>
+                      <span className="opacity-80">Trang {pIdx + 1} / {totalPages}</span>
                     </div>
                   </div>
                 ) : (
@@ -886,14 +886,14 @@ export default function Home() {
                     >
                       <span
                         style={{
-                          fontSize: '20px',
-                          fontWeight: 800,
-                          color: '#222',
+                          fontSize: '22px',
+                          fontWeight: 900,
+                          color: '#020617',
                         }}
                       >
                         {headerText}
                       </span>
-                      <span style={{ fontSize: '12px', color: '#666' }}>
+                      <span style={{ fontSize: '13px', fontWeight: 800, color: '#475569' }}>
                         - {subText}
                       </span>
                       {showMeta && (
