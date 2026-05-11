@@ -964,7 +964,7 @@ export default function Home() {
 
   /* ═══════════════════════════ RENDER ═══════════════════════════ */
   return (
-    <div className="min-h-screen flex flex-col md:flex-row" style={{ background: 'var(--canvas-parchment)' }}>
+    <div className="app-root min-h-screen flex flex-col md:flex-row" style={{ background: 'var(--canvas-parchment)' }}>
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Do+Hyeon&family=East+Sea+Dokdo&family=Gaegu:wght@400;700&family=Gamja+Flower&family=Gothic+A1:wght@400;700;800&family=Hi+Melody&family=Jua&family=Nanum+Gothic:wght@400;700;800&family=Nanum+Myeongjo:wght@400;700;800&family=Nanum+Pen+Script&family=Poor+Story&display=swap');
@@ -972,7 +972,10 @@ export default function Home() {
         @media print {
           .no-print { display: none !important; }
           html, body, main { height: auto !important; overflow: visible !important; background: white !important; }
-          .print-container { display: block !important; padding: 0 !important; margin: 0 !important; gap: 0 !important; }
+          .app-root { min-height: 0 !important; display: block !important; }
+          .print-container { display: block !important; padding: 0 !important; margin: 0 !important; gap: 0 !important; overflow: visible !important; }
+          .pages-scroll-wrap { padding: 0 !important; margin: 0 !important; overflow: visible !important; max-width: none !important; width: auto !important; }
+          .pages-flex-wrap { display: block !important; padding: 0 !important; margin: 0 !important; gap: 0 !important; width: auto !important; max-width: none !important; }
           .worksheet-page {
             width: ${printPageW}mm !important; height: ${printPageH}mm !important;
             padding: ${MARGIN_MM}mm !important; box-shadow: none !important;
@@ -1451,8 +1454,8 @@ export default function Home() {
           </div>
 
           {/* Pages */}
-          <div className="w-full max-w-[100vw] overflow-x-auto pb-4">
-            <div className="flex flex-col items-start sm:items-center gap-8 w-max mx-auto px-4 sm:px-0">
+          <div className="pages-scroll-wrap w-full max-w-[100vw] overflow-x-auto pb-4">
+            <div className="pages-flex-wrap flex flex-col items-start sm:items-center gap-8 w-max mx-auto px-4 sm:px-0">
               {isTopikFrontMode ? (
                 <div className="worksheet-page bg-white"
                   style={{ width:'210mm', height:'297mm', padding:`${MARGIN_MM}mm`, boxSizing:'border-box', display:'flex', flexDirection:'column' }}>
